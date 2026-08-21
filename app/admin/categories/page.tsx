@@ -6,13 +6,19 @@ import { products } from "@/lib/products";
 
 export default function CategoriesPage() {
     const [search, setSearch] = useState("");
-    const filteredCategories = categories.filter((category) =>
-    category.name.toLowerCase().includes(search.toLowerCase())
+    const [categoryList, setCategoryList] = useState(categories);
+    const filteredCategories = categoryList.filter((category) =>
+  category.name.toLowerCase().includes(search.toLowerCase())
 );
 
 function getProductCount(categoryName: string) {
   return products.filter((p) => p.category === categoryName).length;
 }
+
+function handleDelete(id: number) {
+    setCategoryList(categoryList.filter((c) => c.id !== id));
+}
+
     return (
         <div>
         <div className="flex justify-between items-center mb-6">
@@ -48,7 +54,12 @@ function getProductCount(categoryName: string) {
                             <td className="p-3">{getProductCount(category.name)}</td>
                             <td className="p-3">
                                 <Link href={`/admin/categories/${category.id}`}className="text-blue-600 mr-3">Modifier</Link>
-                                <button className="text-red-600">Supprimer</button>
+                                <button 
+                                    onClick={() => handleDelete(category.id)}
+                                    className="text-red-600"
+                                    >
+                                        Supprimer
+                                </button>
                             </td>
                         </tr>
                     ))}
