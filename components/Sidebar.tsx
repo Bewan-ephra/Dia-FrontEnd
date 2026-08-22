@@ -1,6 +1,15 @@
+"use client";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function Sidebar() {
+
+  const router = useRouter();
+
+  function handleSubmit(){
+    localStorage.removeItem("isLoggedIn");
+    router.push("/login");
+  }
   return (
     <aside className="w-64 h-screen bg-gray-900 text-white flex flex-col p-6">
       <div className="text-2xl font-bold mb-10">DIA Admin</div>
@@ -11,6 +20,13 @@ export default function Sidebar() {
         <Link href="/admin/commandes">Commandes</Link>
         <Link href="/admin/clients">Clients</Link>
       </nav>
+
+      <button
+        onClick={handleSubmit}
+        className="mt-auto text-left hover:underline"
+      >
+        Déconnexion
+      </button>
     </aside>
   );
 }
