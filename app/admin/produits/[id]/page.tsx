@@ -47,6 +47,7 @@ export default function EditProductPage({
 
   return (
     <div>
+      <p className="text-gray-500 mb-4">Référence : {product.reference}</p>
       <h1 className="text-2xl font-bold mb-6">Modifier : {product.name}</h1>
       {success && (
         <p className="text-green-600 mb-4">Produit modifier avec succès !</p>

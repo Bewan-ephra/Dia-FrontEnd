@@ -34,6 +34,7 @@ function handleDelete(id: number) {
                 <thead>
                     <tr className="bg-gray-100 text-left text-gray-700">
                     <th className="p-3">ID</th>
+                    <th className="p-3">Référence</th>
                     <th className="p-3">Nom</th>
                     <th className="p-3">Prix</th>
                     <th className="p-3">Stock</th>
@@ -45,6 +46,7 @@ function handleDelete(id: number) {
                     {filteredProducts.map((product) => (
                        <tr key={product.id} className="border-b">
                         <td className="p-3">{product.id}</td>
+                        <td className="p-3">{product.reference}</td>
                         <td className="p-3">{product.name}</td>
                         <td className="p-3">{product.price}</td>
                         <td className="p-3">{product.stock}</td>
