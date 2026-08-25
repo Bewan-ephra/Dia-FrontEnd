@@ -29,7 +29,7 @@ export default function ClientsPage() {
 
           <table className="w-full border-collapse text-sm">
          <thead>
-            <tr className="border-b border-gray-200 text-left text-gray-500">
+            <tr className="border-b bg-gray-200 text-left text-gray-500">
             <th className="p-3 font-medium">Nom</th>
             <th className="p-3 font-medium">Email</th>
             <th className="p-3 font-medium">Date d'inscription</th>

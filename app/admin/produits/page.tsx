@@ -48,7 +48,7 @@ function getStockBadge(stock: number) {
 
   <table className="w-full border-collapse text-sm">
   <thead>
-    <tr className="border-b border-gray-200 text-left text-gray-500">
+    <tr className="border-b bg-gray-200 text-left text-gray-500">
       <th className="p-3 font-medium">Référence</th>
       <th className="p-3 font-medium">Nom</th>
       <th className="p-3 font-medium">Prix</th>
