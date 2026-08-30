@@ -1,6 +1,6 @@
 "use client";
-import { useState} from "react";
-import {categories} from "@/lib/categories";
+import { useState, useEffect } from "react";
+import {getCategories} from "@/lib/api";
 import Link from "next/link";
 import { products } from "@/lib/products";
 import { Pencil, Trash2, Search, FolderPlus } from "lucide-react";
@@ -8,7 +8,12 @@ import { Pencil, Trash2, Search, FolderPlus } from "lucide-react";
 
 export default function CategoriesPage() {
     const [search, setSearch] = useState("");
-    const [categoryList, setCategoryList] = useState(categories);
+   const [categoryList, setCategoryList] = useState<any[]>([]);
+
+useEffect(() => {
+  getCategories().then((data) => setCategoryList(data));
+}, []);
+
     const filteredCategories = categoryList.filter((category) =>
   category.name.toLowerCase().includes(search.toLowerCase())
 );
