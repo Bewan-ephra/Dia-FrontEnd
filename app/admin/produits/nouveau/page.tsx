@@ -1,86 +1,118 @@
 "use client";
-
-import { products } from "@/lib/products";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { categories } from "@/lib/categories";
+import { createProduct } from "@/lib/api/products";
+import { getCategories, Category } from "@/lib/api/categories";
 
 export default function NewProductPage() {
-    const [name, setName] = useState("");
-    const [price, setPrice] = useState("");
-    const [stock, setStock] = useState("");
-    const [category, setCategory] = useState("");
-    const router = useRouter();
-    const [success, setSuccess] = useState(false);
-    
-    function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-       const newProduct = {
-        id: products.length + 1,
+  const router = useRouter();
+
+  const [name, setName] = useState("");
+  const [slug, setSlug] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [comparePrice, setComparePrice] = useState("");
+  const [stock, setStock] = useState("");
+  const [sku, setSku] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    getCategories()
+      .then(setCategories)
+      .catch((err) => setError(err instanceof Error ? err.message : "Erreur chargement catégories"));
+  }, []);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setIsSaving(true);
+    setError(null);
+
+    try {
+      await createProduct({
         name,
+        slug,
+        description: description || undefined,
         price: Number(price),
+        compare_price: comparePrice ? Number(comparePrice) : null,
         stock: Number(stock),
-        category,
-       };
-       products.push(newProduct);
-       setSuccess(true);
-       setTimeout(() => {
-        router.push("/admin/produits");
-       }, 1000);
+        sku: sku || undefined,
+        category_id: Number(categoryId),
+      });
+      setSuccess(true);
+      setTimeout(() => router.push("/admin/produits"), 1000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erreur lors de la création");
+    } finally {
+      setIsSaving(false);
     }
+  }
 
-    return (
-        <div>
-            <h1 className="text-2xl font-bold mb-6">Ajouter un produit</h1>
-            {success && (
-                <p className="text-green-600 mb-4">Produit ajouter avec succès !</p>
-            )}
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-6">Ajouter un produit</h1>
 
-            <form className="flex flex-col gap-4 max-w-md" onSubmit={handleSubmit}>
-                <input
-                type="text"
-                placeholder="Nom du produit"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="border rounded px-4 py-2"
-                />
+      {error && (
+        <div className="bg-red-100 text-red-700 border border-red-300 rounded p-3 mb-4">{error}</div>
+      )}
+      {success && <p className="text-green-600 mb-4">Produit ajouté avec succès !</p>}
 
-                <input
-                type="number"
-                placeholder="Prix"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                className="border rounded px-4"
-                />
-
-                <input
-                type="number"
-                placeholder="Stock"
-                value={stock}
-                onChange={(e) => setStock(e.target.value)}
-                className="border rounded px-4 py-2"
-                />
-
-                <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="border rounded px-4 py-2"
-                >
-                    <option value="">Choisir une catégorie</option>
-                    {categories.map((cat) => (
-                        <option key={cat.id} value={cat.name}>
-                            {cat.name}
-                        </option>
-                    ))}
-                    </select>
-                    
-                <button
-                type="submit"
-                className="bg-blue-600 text-white rounded px-4 py-2"
-                >
-                    Ajouter le produit
-                </button>
-            </form>
-        </div>
-    );
+      <form className="flex flex-col gap-4 max-w-md" onSubmit={handleSubmit}>
+        <input
+          type="text" placeholder="Nom du produit" value={name}
+          onChange={(e) => setName(e.target.value)} required
+          className="border rounded px-4 py-2"
+        />
+        <input
+          type="text" placeholder="Slug (ex: iphone-15)" value={slug}
+          onChange={(e) => setSlug(e.target.value)} required
+          className="border rounded px-4 py-2"
+        />
+        <textarea
+          placeholder="Description" value={description}
+          onChange={(e) => setDescription(e.target.value)} rows={4}
+          className="border rounded px-4 py-2"
+        />
+        <input
+          type="number" step="0.01" placeholder="Prix" value={price}
+          onChange={(e) => setPrice(e.target.value)} required
+          className="border rounded px-4 py-2"
+        />
+        <input
+          type="number" step="0.01" placeholder="Prix barré (promo, optionnel)" value={comparePrice}
+          onChange={(e) => setComparePrice(e.target.value)}
+          className="border rounded px-4 py-2"
+        />
+        <input
+          type="number" placeholder="Stock" value={stock}
+          onChange={(e) => setStock(e.target.value)} required
+          className="border rounded px-4 py-2"
+        />
+        <input
+          type="text" placeholder="SKU (référence, optionnel)" value={sku}
+          onChange={(e) => setSku(e.target.value)}
+          className="border rounded px-4 py-2"
+        />
+        <select
+          value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required
+          className="border rounded px-4 py-2"
+        >
+          <option value="">Choisir une catégorie</option>
+          {categories.map((cat) => (
+            <option key={cat.id} value={cat.id}>{cat.name}</option>
+          ))}
+        </select>
+        <button
+          type="submit" disabled={isSaving}
+          className="bg-blue-600 text-white rounded px-4 py-2 disabled:opacity-50"
+        >
+          {isSaving ? "Ajout..." : "Ajouter le produit"}
+        </button>
+      </form>
+    </div>
+  );
 }
