@@ -32,7 +32,7 @@ export default function Navbar() {
                     <Link href="/produits">Catalogue</Link>
                 </li>
                 <li>
-                    <Link href="/produits">Categories</Link>
+                    <Link href="/categories">Categories</Link>
                 </li>
                 </ul>
 
