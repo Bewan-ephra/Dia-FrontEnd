@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { getCart, removeFromCart } from "@/lib/api";
+import Link from "next/link";
 
 export default function PanierPage() {
     const [cart, setCart] = useState<any>(null);
@@ -63,7 +64,15 @@ export default function PanierPage() {
 
                         <div className="text-right font-bold text-lg text-gray-900 mt-4">
                             Total : {cart.total} FCFA
-                        </div>
+                            </div>
+                            
+                            <Link
+                            href="/checkout"
+                            className="block text-center bg-blue-600 text-white rounded-lg px-6 py-3 font-medium mt-4"
+                            >
+                                Passer la commande
+                            </Link>
+                        
                     </div>
                 )}
         </div>
