@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { getMe } from "@/lib/api";
+import Link from "next/link";
 
 export default function ProfilPage() {
   const [user, setUser] = useState<any>(null);
@@ -33,6 +34,13 @@ export default function ProfilPage() {
           <p className="text-gray-500 text-sm">Email</p>
           <p className="text-gray-900 font-medium">{user.email}</p>
         </div>
+
+        <Link
+        href="/commandes"
+        className="block mt-6 bg-white rounded-xl border border-gray-200 p-4 shadow-sm hover:shadow-md transition text-gray-900 font-medium"
+        >
+          Mes commandes →
+        </Link>
       </div>
     </>
   );
