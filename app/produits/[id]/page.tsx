@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
-import { getProduct } from "@/lib/api";
+import { getProduct, addToCart } from "@/lib/api";
 
 export default function ProductDetailPage({
   params,
@@ -21,6 +21,16 @@ export default function ProductDetailPage({
     return <div>Chargement...</div>;
   }
 
+  async function handleAddToCart() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Connecte-toi pour ajouter un produit au panier.");
+      return;
+    }
+    await addToCart(token, product.id, 1);
+    alert("Produit ajouté au panier !");
+  }
+
   return (
     <>
       <Navbar />
@@ -33,7 +43,10 @@ export default function ProductDetailPage({
           {product.price} FCFA
         </p>
         <p className="text-gray-600 mb-6">{product.description}</p>
-        <button className="bg-blue-600 text-white rounded-lg px-6 py-3 font-medium">
+        <button 
+         onClick={handleAddToCart}
+         className="bg-blue-600 text-white rounded-lg px-6 py-3 font-medium"
+         >
           Ajouter au panier
         </button>
       </div>
