@@ -29,7 +29,8 @@ export default function ProduitsPage() {
   return (
     <>
       <Navbar />
-      <div className="max-w-6xl mx-auto px-8 py-16">
+     <div className="bg-white min-h-screen">
+        <div className="max-w-3xl mx-auto px-8 py-16">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">
           Notre catalogue
         </h1>
@@ -61,6 +62,7 @@ export default function ProduitsPage() {
             </Link>
           ))}
         </div>
+      </div>
       </div>
     </>
   );

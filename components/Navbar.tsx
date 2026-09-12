@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ShoppingCart, User, Menu } from "lucide-react";
+import { ShoppingCart, User, Menu, Heart } from "lucide-react";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -37,6 +37,9 @@ export default function Navbar() {
                 </ul>
 
                 <div className="hidden md:flex items-center gap-4">
+                    <Link href="/favoris" className="text-gray-600 hover:text-blue-600">
+                        <Heart size={20} />
+                    </Link>
                     <Link href="/panier" className="text-gray-600 hover:text-blue-600">
                         <ShoppingCart size={20} />
                     </Link>

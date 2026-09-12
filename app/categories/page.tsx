@@ -15,7 +15,8 @@ export default function CategoriesPublicPage() {
   return (
     <>
       <Navbar />
-      <div className="max-w-6xl mx-auto px-8 py-16">
+     <div className="bg-white min-h-screen">
+        <div className="max-w-3xl mx-auto px-8 py-16">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Catégories</h1>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
@@ -29,6 +30,7 @@ export default function CategoriesPublicPage() {
             </Link>
           ))}
         </div>
+      </div>
       </div>
     </>
   );
