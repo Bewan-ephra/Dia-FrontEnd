@@ -26,7 +26,8 @@ export default function ProfilPage() {
   return (
     <>
       <Navbar />
-      <div className="max-w-2xl mx-auto px-8 py-16">
+      <div className="bg-white min-h-screen">
+        <div className="max-w-3xl mx-auto px-8 py-16">
         <h1 className="text-2xl font-bold text-gray-900 mb-6">Mon profil</h1>
         <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
           <p className="text-gray-500 text-sm">Nom</p>
@@ -41,6 +42,14 @@ export default function ProfilPage() {
         >
           Mes commandes →
         </Link>
+
+        <Link
+         href="/adresses"
+         className="block mt-4 bg-white rounded-xl border border-gray-200 p-4 shadow-sm hover:shadow-md transition text-gray-900 font-medium"
+        >
+          Mes adresses →
+        </Link>
+      </div>
       </div>
     </>
   );
