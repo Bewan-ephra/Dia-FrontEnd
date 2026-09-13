@@ -33,6 +33,7 @@ export default function PanierPage() {
     return(
         <>
         <Navbar />
+         <div className="bg-white min-h-screen">
         <div className="max-w-3xl mx-auto px-8 py-16">
             <h1 className="text-2xl font-bold text-gray-900 mb-6">Mon panier</h1>
 
@@ -75,6 +76,7 @@ export default function PanierPage() {
                         
                     </div>
                 )}
+        </div>
         </div>
         </>
     );
