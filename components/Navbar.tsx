@@ -1,11 +1,20 @@
 "use client";
 
+import { getCategoriesPublic } from "@/lib/api";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ShoppingCart, User, Menu, Heart } from "lucide-react";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+
+
+const [categories, setCategories] = useState<any[]>([]);
+const [showDropdown, setShowDropdown] = useState(false);
+
+useEffect(() => {
+    getCategoriesPublic().then((data) => setCategories(data));
+}, []);
 
     return (
         <nav className="flex items-center justify-between px-8 py-4 bg-white shadow-md relative">
@@ -31,9 +40,29 @@ export default function Navbar() {
                 <li>
                     <Link href="/produits">Catalogue</Link>
                 </li>
-                <li>
-                    <Link href="/categories">Categories</Link>
-                </li>
+
+                <li
+                    className="relative"
+                    onMouseEnter={() => setShowDropdown(true)}
+                    onMouseLeave={() => setShowDropdown(false)}
+                >
+                    <Link href="/categories" className= "block py-2">Categories</Link>
+                
+                {showDropdown && (
+                    <div className="absolute top-full left-0  bg-white border border-gray-200 rounded-lg shadow-lg py-2 w-48 z-20">
+                        {categories.map((category) => (
+                        <Link
+                            key={category.id}
+                            href={`/produits?category_id=${category.id}`}
+                            className="block px-4 py-2 text-gray-700 hover:bg-gray-50"
+                        >
+                            {category.name}
+                         </Link>
+                        ))}
+                    </div>
+                    )}
+
+                 </li>
                 </ul>
 
                 <div className="hidden md:flex items-center gap-4">
