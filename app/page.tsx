@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import { getCategoriesPublic } from "@/lib/api";
+import { getCategoriesPublic, getCategoryImage } from "@/lib/api";
+
 
 const slides = ["/banners/banner1.png", "/banners/banner2.png", "/banners/banner3.png"];
 
@@ -23,6 +24,7 @@ export default function Home() {
 useEffect(() => {
   getCategoriesPublic().then((data) => setCategories(data));
 }, []);
+
 
   return (
     <>
@@ -87,13 +89,31 @@ useEffect(() => {
   </h2>
   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
     {categories.map((category) => (
+
       <Link
-        key={category.id}
-        href={`/produits?category_id=${category.id}`}
-        className="bg-gray-50 rounded-xl p-6 text-center hover:bg-gray-100 transition"
-      >
-        <p className="font-medium text-gray-900">{category.name}</p>
-      </Link>
+  key={category.id}
+  href={`/produits?category_id=${category.id}`}
+  className="relative rounded-xl overflow-hidden h-40 group bg-gray-100"
+>
+  {getCategoryImage(category.name) ? (
+    <>
+      <Image
+        src={getCategoryImage(category.name)!}
+        alt={category.name}
+        fill
+        className="object-cover group-hover:scale-105 transition"
+      />
+      <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+        <p className="font-medium text-white">{category.name}</p>
+      </div>
+    </>
+  ) : (
+    <div className="h-full flex items-center justify-center">
+      <p className="font-medium text-gray-700">{category.name}</p>
+    </div>
+  )}
+</Link>
+
     ))}
   </div>
 </div>

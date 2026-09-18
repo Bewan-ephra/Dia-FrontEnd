@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Heart } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import { getFavorites, toggleFavorite } from "@/lib/api";
+import Image from "next/image";
+import { getFavorites, toggleFavorite, getCategoryImage } from "@/lib/api";
 
 export default function FavorisPage() {
     const [favorites, setFavorites] = useState<any[]>([]);
@@ -44,7 +45,16 @@ export default function FavorisPage() {
                                         >
                                             <Heart size={20} className="fill-red-500 text-red-500" />
                                         </button>
-                                        <div className="bg-gray-100 rounded-lg h-40 mb-3"></div>
+                                        <div className="relative h-40 rounded-lg overflow-hidden mb-3 bg-gray-100">
+                                            {getCategoryImage(product.category?.name) ? (
+                                        <Image
+                                            src={getCategoryImage(product.category?.name)!}
+                                            alt={product.name}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                         ) : null}
+                                            </div>
                                         <p className="font-medium text-gray-900">{product.name}</p>
                                         <p className="text-gray-500">{product.price} FCFA</p>
                                 </Link>

@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
-import { getProduct, addToCart } from "@/lib/api";
+import { getProduct, addToCart, getCategoryImage } from "@/lib/api";
+import Image from "next/image";
 
 export default function ProductDetailPage({
   params,
@@ -36,9 +37,21 @@ export default function ProductDetailPage({
       <Navbar />
      <div className="bg-white min-h-screen">
       <div className="max-w-4xl mx-auto px-8 py-16">
+        <div className="relative h-[500px] max-w-md mx-auto rounded-xl overflow-hidden mb-6 bg-gray-100">
+          {getCategoryImage(product.category?.name) ? (
+            <Image
+              src={getCategoryImage(product.category?.name)! }
+            alt={product.name }
+            fill
+            className="object-cover"
+            />
+             ) : null}
+        </div>
+
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
           {product.name}
         </h1>
+        
         <p className="text-xl text-blue-600 font-semibold mb-4">
           {product.price} FCFA
         </p>

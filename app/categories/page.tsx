@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import { getCategoriesPublic } from "@/lib/api";
+import Image from "next/image";
+import { getCategoriesPublic, getCategoryImage } from "@/lib/api";
 
 export default function CategoriesPublicPage() {
   const [categories, setCategories] = useState<any[]>([]);
@@ -21,12 +22,28 @@ export default function CategoriesPublicPage() {
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
           {categories.map((category) => (
-            <Link
+           <Link
               key={category.id}
               href={`/produits?category_id=${category.id}`}
-              className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition text-center"
+              className="relative rounded-xl overflow-hidden h-40 group bg-gray-100"
             >
-              <p className="font-medium text-gray-900">{category.name}</p>
+              {getCategoryImage(category.name) ? (
+            <>
+          <Image
+              src={getCategoryImage(category.name)!}
+              alt={category.name}
+              fill
+              className="object-cover group-hover:scale-105 transition"
+            />
+                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                     <p className="font-medium text-white">{category.name}</p>
+                  </div>
+                  </>
+                 ) : (
+              <div className="h-full flex items-center justify-center">
+                 <p className="font-medium text-gray-700">{category.name}</p>
+               </div>
+                )}
             </Link>
           ))}
         </div>
