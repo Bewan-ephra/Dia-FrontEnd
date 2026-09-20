@@ -5,13 +5,14 @@ import Navbar from "@/components/Navbar";
 import { getProduct, addToCart, getCategoryImage } from "@/lib/api";
 import Image from "next/image";
 
+
 export default function ProductDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const [product, setProduct] = useState<any>(null);
-
+  const [addedToCart, setAddedToCart] = useState(false);
   useEffect(() => {
     params.then(({ id }) => {
       getProduct(id).then((data) => setProduct(data));
@@ -23,15 +24,20 @@ export default function ProductDetailPage({
   }
 
   async function handleAddToCart() {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Connecte-toi pour ajouter un produit au panier.");
-      return;
-    }
-    await addToCart(token, product.id, 1);
-    alert("Produit ajouté au panier !");
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Connecte-toi pour ajouter un produit au panier.");
+    return;
   }
+  await addToCart(token, product.id, 1);
+  setAddedToCart(true);
+  setTimeout(() => setAddedToCart(false), 2000);
+}
 
+ 
+  
+  
+  
   return (
     <>
       <Navbar />
@@ -56,6 +62,13 @@ export default function ProductDetailPage({
           {product.price} FCFA
         </p>
         <p className="text-gray-600 mb-6">{product.description}</p>
+        
+        {addedToCart && (
+  <p className="text-green-600 font-medium mb-3">
+    Produit ajouté au panier !
+  </p>
+)}
+
         <button 
          onClick={handleAddToCart}
          className="bg-blue-600 text-white rounded-lg px-6 py-3 font-medium"

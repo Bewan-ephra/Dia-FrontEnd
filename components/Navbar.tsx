@@ -3,79 +3,105 @@
 import { getCategoriesPublic } from "@/lib/api";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { ShoppingCart, User, Menu, Heart } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ShoppingCart, User, Menu, Heart, Search } from "lucide-react";
 
 export default function Navbar() {
-    const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [search, setSearch] = useState("");
+  const router = useRouter();
 
-
-const [categories, setCategories] = useState<any[]>([]);
-const [showDropdown, setShowDropdown] = useState(false);
-
-useEffect(() => {
+  useEffect(() => {
     getCategoriesPublic().then((data) => setCategories(data));
-}, []);
+  }, []);
 
-    return (
-        <nav className="flex items-center justify-between px-8 py-4 bg-white shadow-md relative">
-            <Link href="/" className="text-xl font-bold text-gray-800">
-                DIA            
-            </Link>
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault();
+    if (search.trim()) {
+      router.push(`/produits?search=${encodeURIComponent(search)}`);
+    }
+  }
 
-            <button
-                className="md:hidden text-2xl"
-                onClick={() => setIsOpen(!isOpen)}
+  return (
+    <nav className="bg-white shadow-md relative">
+      {/* Ligne 1 : logo, recherche, icônes */}
+      <div className="flex items-center justify-between px-8 py-4 gap-4">
+        <Link href="/" className="text-xl font-bold text-gray-800 flex-shrink-0">
+          DIA
+        </Link>
+
+        <form
+          onSubmit={handleSearch}
+          className="hidden md:flex items-center relative flex-1 max-w-xl"
+        >
+          <Search size={16} className="absolute left-3 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Rechercher..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="border rounded-lg pl-9 pr-4 py-2 text-sm w-full"
+          />
+        </form>
+
+        <button
+          className="md:hidden text-2xl"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <Menu size={24} />
+        </button>
+
+        <div className="hidden md:flex items-center gap-4 flex-shrink-0">
+          <Link href="/favoris" className="text-gray-600 hover:text-blue-600">
+            <Heart size={20} />
+          </Link>
+          <Link href="/panier" className="text-gray-600 hover:text-blue-600">
+            <ShoppingCart size={20} />
+          </Link>
+          <Link href="/profil" className="text-gray-600 hover:text-blue-600">
+            <User size={20} />
+          </Link>
+        </div>
+      </div>
+
+      {/* Ligne 2 : liens de navigation */}
+      <ul
+        className={`${
+          isOpen ? "flex" : "hidden"
+        } md:flex flex-col md:flex-row gap-8 text-gray-600 absolute md:static top-full left-0 w-full md:w-auto bg-white md:bg-transparent px-8 md:px-8 py-4 md:py-2 items-center md:border-t md:border-gray-100`}
+      >
+        <li>
+          <Link href="/">Accueil</Link>
+        </li>
+        <li>
+          <Link href="/produits">Catalogue</Link>
+        </li>
+        <li
+          className="relative"
+          onMouseEnter={() => setShowDropdown(true)}
+          onMouseLeave={() => setShowDropdown(false)}
+        >
+          <Link href="/categories" className="block py-2">
+            Categories
+          </Link>
+
+          {showDropdown && (
+            <div className="absolute top-full left-0 bg-white border border-gray-200 rounded-lg shadow-lg py-2 w-48 z-20">
+              {categories.map((category) => (
+                <Link
+                  key={category.id}
+                  href={`/produits?category_id=${category.id}`}
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-50"
                 >
-                    <Menu size={24} />
-            </button>
-
-            <ul
-             className={`${
-                    isOpen ? "flex" : "hidden"
-                    } md:flex flex-col md:flex-row gap-8 text-gray-600 absolute md:static top-16 left-0 w-full md:w-auto bg-white md:bg-transparent px-8 md:px-0 py-4 md:py-0 items-center`}
-            >
-                <li>
-                    <Link href="/">Acceuil</Link>
-                </li>
-                <li>
-                    <Link href="/produits">Catalogue</Link>
-                </li>
-
-                <li
-                    className="relative"
-                    onMouseEnter={() => setShowDropdown(true)}
-                    onMouseLeave={() => setShowDropdown(false)}
-                >
-                    <Link href="/categories" className= "block py-2">Categories</Link>
-                
-                {showDropdown && (
-                    <div className="absolute top-full left-0  bg-white border border-gray-200 rounded-lg shadow-lg py-2 w-48 z-20">
-                        {categories.map((category) => (
-                        <Link
-                            key={category.id}
-                            href={`/produits?category_id=${category.id}`}
-                            className="block px-4 py-2 text-gray-700 hover:bg-gray-50"
-                        >
-                            {category.name}
-                         </Link>
-                        ))}
-                    </div>
-                    )}
-
-                 </li>
-                </ul>
-
-                <div className="hidden md:flex items-center gap-4">
-                    <Link href="/favoris" className="text-gray-600 hover:text-blue-600">
-                        <Heart size={20} />
-                    </Link>
-                    <Link href="/panier" className="text-gray-600 hover:text-blue-600">
-                        <ShoppingCart size={20} />
-                    </Link>
-                    <Link href="/profil" className="text-gray-600 hover:text-blue-600">
-                        <User size={20} />
-                    </Link>
-                </div>
-        </nav>
-    )
+                  {category.name}
+                </Link>
+              ))}
+            </div>
+          )}
+        </li>
+      </ul>
+    </nav>
+  );
 }

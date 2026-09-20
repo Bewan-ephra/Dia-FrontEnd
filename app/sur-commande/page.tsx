@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Heart } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import { getProducts, getFavorites, toggleFavorite } from "@/lib/api";
+import Image from "next/image";
+import { getProducts, getFavorites, toggleFavorite, getCategoryImage  } from "@/lib/api";
 
 export default function SurCommandePage() {
   const [products, setProducts] = useState<any[]>([]);
@@ -55,7 +56,23 @@ export default function SurCommandePage() {
                     }
                   />
                 </button>
-                <div className="bg-gray-100 rounded-lg h-40 mb-3"></div>
+                <div className="relative h-40 rounded-lg overflow-hidden mb-3 bg-gray-100">
+                  {getCategoryImage(product.category?.name) ? (
+                
+                <Image
+                  src={getCategoryImage(product.category?.name)!}
+                  alt={product.name}
+                  fill
+                  className="object-cover"
+                />
+                  ) : null}
+                  </div>
+                  {product.onOrder && (
+                    <span className="absolute top-3 left-3 bg-amber-500 text-white text-xs font-medium px-2 py-1 rounded-full z-10">
+                  Sur commande
+                    </span>
+                  )}
+                  
                 <p className="font-medium text-gray-900">{product.name}</p>
                 <p className="text-gray-500">{product.price} FCFA</p>
               </Link>

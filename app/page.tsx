@@ -42,8 +42,8 @@ useEffect(() => {
     fill
     className="object-cover group-hover:scale-105 transition"
   />
-  <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-    <p className="font-medium text-white text-2xl mb-1">Sur commande</p>
+  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent flex flex-col items-center justify-end p-3 text-center">
+    <p className="font-bold text-white text-2xl mb-3">Sur commande</p>
   </div>
 </Link>
 
@@ -73,17 +73,24 @@ useEffect(() => {
     </div>
   </div>
 
-  <div className="relative h-64 md:h-80 rounded-xl overflow-hidden">
+ <Link
+  href="/produits"
+  className="relative h-64 md:h-80 rounded-xl overflow-hidden group"
+>
   <Image
     src="/banners/vignette-droite.png"
     alt="Image promotionnelle"
     fill
-    className="object-cover"
+    className="object-cover group-hover:scale-105 transition"
   />
-            </div>
+  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent flex flex-col items-center justify-end p-3 text-center">
+    <p className="font-bold text-white text-2xl mb-3">Sur commande</p>
 
-          </div>
-          <div className="mt-12">
+  </div>
+</Link>
+
+    </div>
+      <div className="mt-12">
   <h2 className="text-xl font-bold text-gray-900 mb-6">
     Catégories populaires
   </h2>
