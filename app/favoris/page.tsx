@@ -6,6 +6,7 @@ import { Heart } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import { getFavorites, toggleFavorite, getCategoryImage } from "@/lib/api";
+import Footer from "@/components/Footer";
 
 export default function FavorisPage() {
     const [favorites, setFavorites] = useState<any[]>([]);
@@ -63,6 +64,7 @@ export default function FavorisPage() {
                     )}
                 </div>
             </div>
+            <Footer />
             </>
     );
 }

@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { getCategoriesPublic, getCategoryImage } from "@/lib/api";
-
+import Footer from "@/components/Footer";
 
 const slides = ["/banners/banner1.png", "/banners/banner2.png", "/banners/banner3.png"];
 
@@ -54,8 +54,8 @@ useEffect(() => {
         src={slide}
         alt="Bannière promotionnelle"
         fill
-        className={`object-cover transition-opacity duration-1000 ${
-          current === index ? "opacity-100" : "opacity-0"
+        className={`object-cover object-top transition-opacity duration-1000 ${
+       current === index ? "opacity-100" : "opacity-0"
         }`}
       />
     ))}
@@ -126,6 +126,7 @@ useEffect(() => {
 </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

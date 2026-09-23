@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { getProduct, addToCart, getCategoryImage } from "@/lib/api";
 import Image from "next/image";
+import Footer from "@/components/Footer";
 
 
 export default function ProductDetailPage({
@@ -77,6 +78,7 @@ export default function ProductDetailPage({
         </button>
       </div>
       </div>
+      <Footer />
     </>
   );
 }

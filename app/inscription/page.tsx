@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { registerUser } from "@/lib/api";
+import Footer from "@/components/Footer";
 
 export default function InscriptionPage() {
   const [name, setName] = useState("");
@@ -75,6 +76,7 @@ export default function InscriptionPage() {
           </button>
         </form>
       </div>
+      <Footer />
     </>
   );
 }

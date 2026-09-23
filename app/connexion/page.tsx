@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { loginUser } from "@/lib/api";
+import Footer from "@/components/Footer";
 
 export default function ConnexionPage() {
   const [email, setEmail] = useState("");
@@ -59,6 +60,7 @@ export default function ConnexionPage() {
           </button>
         </form>
       </div>
+      <Footer />
     </>
   );
 }

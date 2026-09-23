@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { getMe } from "@/lib/api";
 import Link from "next/link";
+import Footer from "@/components/Footer";
 
 export default function ProfilPage() {
   const [user, setUser] = useState<any>(null);
@@ -51,6 +52,7 @@ export default function ProfilPage() {
         </Link>
       </div>
       </div>
+      <Footer />
     </>
   );
 }

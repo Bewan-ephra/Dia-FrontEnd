@@ -6,6 +6,7 @@ import { Heart } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import { getProducts, getFavorites, toggleFavorite, getCategoryImage  } from "@/lib/api";
+import Footer from "@/components/Footer";
 
 export default function SurCommandePage() {
   const [products, setProducts] = useState<any[]>([]);
@@ -80,6 +81,7 @@ export default function SurCommandePage() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

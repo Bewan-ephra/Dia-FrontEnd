@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { myOrders } from "@/lib/myOrders";
+import Footer from "@/components/Footer";
 
 function getStatusColor(status: string) {
   if (status === "En attente") return "bg-yellow-100 text-yellow-700";
@@ -60,6 +61,7 @@ export default function CommandeDetailPage({
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

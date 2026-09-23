@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import { getCart, removeFromCart, getCategoryImage } from "@/lib/api";
 import Link from "next/link";
+import Footer from "@/components/Footer";
 
 export default function PanierPage() {
     const [cart, setCart] = useState<any>(null);
@@ -92,6 +93,7 @@ export default function PanierPage() {
     )}
         </div>
         </div>
+        <Footer />
         </>
     );
 }

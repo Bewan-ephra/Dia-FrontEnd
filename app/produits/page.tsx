@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import { getProducts, getFavorites, toggleFavorite, getCategoryImage } from "@/lib/api";
 import { Heart } from "lucide-react";
 import Image from "next/image";
+import Footer from "@/components/Footer";
 
 export default function ProduitsPage() {
   const [products, setProducts] = useState<any[]>([]);
@@ -78,6 +79,7 @@ export default function ProduitsPage() {
         </div>
       </div>
       </div>
+      <Footer />
     </>
   );
 }
