@@ -21,6 +21,8 @@ export default function ProduitsPage() {
     setFavorites(getFavorites());
   }, []);
 
+  
+
   function handleToggleFavorite(e: React.MouseEvent, product: any) {
     e.preventDefault();
     const updated = toggleFavorite(product);
