@@ -37,10 +37,11 @@ export default function PanierPage() {
         <Navbar />
          <div className="bg-white min-h-screen">
         <div className="max-w-3xl mx-auto px-8 py-16">
-            <h1 className="text-2xl font-bold text-gray-900 mb-6">Mon panier</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">Votre panier est actuellement vide.</h1>
 
                 {cart.cart.items.length === 0 ? (
-                    <p className="text-gray-500">Ton panier est vide.</p>
+                    <p className="text-gray-500 text-center">Avant de procéder au paiement, vous devez ajouter certains produits à votre panier.
+Vous trouverez de nombreux produits intéressants sur notre site Web.</p>
                 ) :(
                     <div className="flex flex-col gap-4">
                         {cart.cart.items.map((item: any) => (

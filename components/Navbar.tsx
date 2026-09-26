@@ -13,9 +13,25 @@ export default function Navbar() {
   const [search, setSearch] = useState("");
   const router = useRouter();
 
-  useEffect(() => {
-    getCategoriesPublic().then((data) => setCategories(data));
-  }, []);
+const [showNavbar, setShowNavbar] = useState(true);
+const [lastScrollY, setLastScrollY] = useState(0);
+
+useEffect(() => {
+  function handleScroll() {
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      setShowNavbar(false);
+    } else {
+      setShowNavbar(true);
+    }
+
+    setLastScrollY(currentScrollY);
+  }
+
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, [lastScrollY]);
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -26,11 +42,15 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="bg-amber-100 text-center py-2 text-sm text-amber-800 font-medium">
-         ARTICLE ÉGALEMENT SUR COMMANDE🎁 
+      <div className="bg-orange-400 text-center py-2 text-sm text-white font-medium">
+        🚚 ARTICLE ÉGALEMENT SUR COMMANDE 
       </div>
    
-    <nav className="bg-white shadow-md relative">
+   <nav
+  className={`bg-white shadow-md sticky top-0 z-30 transition-transform duration-300 ${
+    showNavbar ? "translate-y-0" : "-translate-y-full"
+  }`}
+>
       
       <div className="flex items-center justify-between px-4 md:px-8 py-4 gap-3">
   <Link href="/" className="text-xl font-bold text-gray-800 flex-shrink-0">
@@ -74,21 +94,21 @@ export default function Navbar() {
       <ul
        className={`${
        isOpen ? "flex" : "hidden"
-       } md:flex flex-col md:flex-row gap-8 text-gray-600 w-full bg-white md:bg-transparent px-8 py-4 md:py-2 items-center md:justify-center md:border-t md:border-gray-100`}
+       } md:flex flex-col md:flex-row gap-8 text-black w-full bg-white md:bg-transparent px-8 py-4 md:py-2 items-center md:justify-center md:border-t md:border-gray-100`}
        >
 
        <li>
-          <Link href="/">Accueil</Link>
+          <Link href="/" className="hover:text-orange-400">Accueil</Link>
         </li>
         <li>
-          <Link href="/produits">Catalogue</Link>
+          <Link href="/produits" className="hover:text-orange-400">Catalogue</Link>
         </li>
         <li
           className="relative"
           onMouseEnter={() => setShowDropdown(true)}
           onMouseLeave={() => setShowDropdown(false)}
         >
-          <Link href="/categories" className="block py-2">
+          <Link href="/categories" className=" hover:text-orange-400 block py-2">
             Categories
           </Link>
 
