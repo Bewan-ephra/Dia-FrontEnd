@@ -13,9 +13,6 @@ export default function Footer() {
     getCategoriesPublic().then((data) => setCategories(data));
   }, []);
 
-  function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
 
   return (
     
@@ -91,12 +88,6 @@ export default function Footer() {
         </div>
       </div>
 
-      <button
-        onClick={scrollToTop}
-        className="absolute right-6 -top-5 bg-white text-gray-900 rounded-lg p-2 shadow-md hover:bg-gray-100"
-      >
-        <ArrowUp size={18} />
-      </button>
     </footer>
   );
 }

@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
+
 
 export default function CheckoutPage() {
   const [name, setName] = useState("");
@@ -69,6 +71,7 @@ export default function CheckoutPage() {
         )}
       </div>
       </div>
+        <ScrollToTop />
       <Footer />
     </>
   );

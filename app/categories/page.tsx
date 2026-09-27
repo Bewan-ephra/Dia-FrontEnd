@@ -6,6 +6,8 @@ import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import { getCategoriesPublic, getCategoryImage } from "@/lib/api";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
+
 
 export default function CategoriesPublicPage() {
   const [categories, setCategories] = useState<any[]>([]);
@@ -50,6 +52,7 @@ export default function CategoriesPublicPage() {
         </div>
       </div>
       </div>
+       <ScrollToTop />
       <Footer />
     </>
   );

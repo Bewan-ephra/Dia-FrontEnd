@@ -6,6 +6,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { getCategoriesPublic, getCategoryImage } from "@/lib/api";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const slides = ["/banners/banner1.png", "/banners/banner2.png", "/banners/banner3.png"];
 
@@ -126,6 +127,7 @@ useEffect(() => {
 </div>
         </div>
       </div>
+      <ScrollToTop />
       <Footer />
     </>
   );

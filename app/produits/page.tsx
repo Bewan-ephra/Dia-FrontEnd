@@ -7,6 +7,8 @@ import { getProducts, getFavorites, toggleFavorite, getCategoryImage } from "@/l
 import { Heart } from "lucide-react";
 import Image from "next/image";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
+
 
 export default function ProduitsPage() {
   const [products, setProducts] = useState<any[]>([]);
@@ -81,6 +83,7 @@ export default function ProduitsPage() {
         </div>
       </div>
       </div>
+          <ScrollToTop />
       <Footer />
     </>
   );

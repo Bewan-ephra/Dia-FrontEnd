@@ -7,6 +7,8 @@ import Image from "next/image";
 import { getCart, removeFromCart, getCategoryImage } from "@/lib/api";
 import Link from "next/link";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
+
 
 export default function PanierPage() {
     const [cart, setCart] = useState<any>(null);
@@ -94,6 +96,7 @@ Vous trouverez de nombreux produits intéressants sur notre site Web.</p>
     )}
         </div>
         </div>
+            <ScrollToTop />
         <Footer />
         </>
     );

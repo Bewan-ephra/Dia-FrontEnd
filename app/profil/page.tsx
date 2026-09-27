@@ -6,6 +6,8 @@ import Navbar from "@/components/Navbar";
 import { getMe } from "@/lib/api";
 import Link from "next/link";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
+
 
 export default function ProfilPage() {
   const [user, setUser] = useState<any>(null);
@@ -52,6 +54,7 @@ export default function ProfilPage() {
         </Link>
       </div>
       </div>
+        <ScrollToTop />
       <Footer />
     </>
   );

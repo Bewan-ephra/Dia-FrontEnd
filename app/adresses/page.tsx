@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { getAddresses, addAddress, removeAddress } from "@/lib/api";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
+
 
 export default function AdressesPage() {
   const [addresses, setAddresses] = useState<any[]>([]);
@@ -93,6 +95,7 @@ export default function AdressesPage() {
           </form>
         </div>
       </div>
+        <ScrollToTop />
       <Footer />
     </>
   );

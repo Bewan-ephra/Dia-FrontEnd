@@ -4,6 +4,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { myOrders } from "@/lib/myOrders";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
 
 function getStatusColor(status: string) {
   if (status === "En attente") return "bg-yellow-100 text-yellow-700";
@@ -52,6 +53,7 @@ export default function MesCommandesPage() {
           </div>
         </div>
       </div>
+        <ScrollToTop />
       <Footer />
     </>
   );

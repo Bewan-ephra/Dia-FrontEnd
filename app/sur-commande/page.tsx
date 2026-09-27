@@ -7,6 +7,8 @@ import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import { getProducts, getFavorites, toggleFavorite, getCategoryImage  } from "@/lib/api";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
+
 
 export default function SurCommandePage() {
   const [products, setProducts] = useState<any[]>([]);
@@ -81,6 +83,7 @@ export default function SurCommandePage() {
           </div>
         </div>
       </div>
+            <ScrollToTop />
       <Footer />
     </>
   );

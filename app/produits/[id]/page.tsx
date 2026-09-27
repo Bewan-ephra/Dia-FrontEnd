@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import Image from "next/image";
 import { getProduct, addToCart, getCategoryImage } from "@/lib/api";
 import { CheckCircle, Minus, Plus, Truck, CreditCard, MessageCircle, X, MapPin, Phone, Map } from "lucide-react";
+import ScrollToTop from "@/components/ScrollToTop";
 
 export default function ProductDetailPage({
   params,
@@ -300,7 +301,7 @@ export default function ProductDetailPage({
           </div>
         </div>
       )}
-
+        <ScrollToTop />
       <Footer />
     </>
   );
