@@ -19,6 +19,8 @@ export default function ProductDetailPage({
   const [addedToCart, setAddedToCart] = useState(false);
   const [showFloatingBar, setShowFloatingBar] = useState(false);
   const [showLocationModal, setShowLocationModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(0);
+
 
   useEffect(() => {
     params.then(({ id }) => {
@@ -63,14 +65,29 @@ export default function ProductDetailPage({
       <Navbar />
       <div className="bg-white min-h-screen">
         <div className="max-w-6xl mx-auto px-8 py-12 grid grid-cols-1 md:grid-cols-2 gap-10">
-          <div className="relative h-[500px] rounded-xl overflow-hidden bg-gray-100">
-            {image ? (
-              <Image
-                src={image}
-                alt={product.name}
-                fill className="object-cover" />
-            ) : null}
-          </div>
+         <div>
+  <div className="relative h-[500px] rounded-xl overflow-hidden bg-gray-100 mb-3">
+    {image ? (
+      <Image src={image} alt={product.name} fill className="object-cover" />
+    ) : null}
+  </div>
+
+  <div className="flex gap-3">
+    {[0, 1].map((index) => (
+      <button
+        key={index}
+        onClick={() => setSelectedImage(index)}
+        className={`relative w-30 h-40 rounded-lg overflow-hidden border-2 ${
+          selectedImage === index ? "border-gray-900" : "border-gray-200"
+        }`}
+      >
+        {image ? (
+          <Image src={image} alt={product.name} fill className="object-cover" />
+        ) : null}
+      </button>
+    ))}
+  </div>
+</div>
 
           <div>
             <h1 className="text-2xl font-bold text-orange-400 mb-2">
@@ -138,9 +155,7 @@ export default function ProductDetailPage({
               AJOUTER AU PANIER
             </button>
 
-              <p className="text-gray-600 mb-6">{product.description}</p>
-
-            <div className="border border-gray-200 rounded-xl divide-y divide-gray-200 mb-6">
+            <div className="border border-gray-200 rounded-xl divide-y divide-gray-200 mb-5">
               <div className="flex items-start gap-3 p-4">
                 <div className="bg-orange-50 text-orange-500 p-2 rounded-full">
                   <Truck size={18} />
@@ -223,6 +238,57 @@ export default function ProductDetailPage({
             </div>
           </div>
         </div>
+
+           {product.specs && (
+  <div className="max-w-6xl mx-auto px-8 pb-12">
+    
+    <div className="mb-4">
+  <h2 className="text-lg font-bold text-gray-900">DESCRIPTION</h2>
+  <div className="w-10 h-0.5 bg-gray-900 mt-1"></div>
+  </div>
+
+    <div className="bg-gradient-to-br from-black via-black to-black rounded-2xl p-8 text-white relative overflow-hidden">
+    <div className="absolute -top-20 -right-20 w-64 h-64 bg-orange-500 rounded-full opacity-30 blur-3xl"></div>
+      <p className="text-orange-400 text-xs font-semibold uppercase mb-2">
+        {product.category?.name} · Description
+      </p>
+      <h2 className="text-2xl font-bold mb-4">{product.name}</h2>
+      <p className="text-gray-300 mb-6 max-w-2xl">{product.description}</p>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        {product.specs.map((spec: any, index: number) => (
+          <div key={index} className="bg-gray-800 rounded-xl p-4">
+            <p className="text-2xl font-bold">{spec.value}</p>
+            <p className="text-gray-400 text-sm">{spec.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {product.features && (
+        <div className="flex flex-wrap gap-2 mb-6">
+          {product.features.map((feature: string, index: number) => (
+            <span
+              key={index}
+              className="bg-gray-800 text-sm px-4 py-2 rounded-full"
+            >
+              {feature}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <div className="flex items-center gap-4 pt-4 border-t border-gray-700">
+        <span className="bg-orange-500 font-bold px-4 py-2 rounded-full">
+          {product.price} FCFA
+        </span>
+        <p className="text-gray-400 text-sm">
+          Livraison 2 000 FCFA partout au Sénégal
+        </p>
+      </div>
+    </div>
+  </div>
+)}
+
       </div>
 
       {showFloatingBar && (
