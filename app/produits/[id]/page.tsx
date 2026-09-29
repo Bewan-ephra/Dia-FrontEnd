@@ -546,23 +546,23 @@ export default function ProductDetailPage({
           </div>
           <div>
             <p className="font-medium text-gray-900">{product.name}</p>
-            <p className="text-gray-500 text-sm mb-2">Taille : {selectedSize}</p>
-            <div className="flex items-center gap-2 mb-2">
+            <p className="text-gray-700 text-sm mb-2">Taille : {selectedSize}</p>
+            <div className="flex items-center gap-2 mb-2 text-black">
               <button
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="w-7 h-7 rounded-lg border border-gray-300 flex items-center justify-center"
+                className="w-7 h-7 rounded-lg border border-black flex items-center justify-center"
               >
                 <Minus size={12} />
               </button>
               <span className="w-6 text-center text-sm">{quantity}</span>
               <button
                 onClick={() => setQuantity((q) => q + 1)}
-                className="w-7 h-7 rounded-lg border border-gray-300 flex items-center justify-center"
+                className="w-7 h-7 rounded-lg border border-black flex items-center justify-center"
               >
                 <Plus size={12} />
               </button>
             </div>
-            <p className="text-gray-900 text-sm">{product.price} FCFA</p>
+            <p className="text-gray-900 text-base">{product.price} FCFA</p>
           </div>
         </div>
 
@@ -573,18 +573,18 @@ export default function ProductDetailPage({
           <div className="flex gap-3 mb-4">
             <Link
               href="/panier"
-              className="flex-1 border border-gray-300 text-center rounded-lg py-2.5 text-sm font-medium"
+              className="flex-1 border border-black text-center rounded-lg py-2.5 text-sm text-black font-medium"
             >
               VOIR LE PANIER
             </Link>
             <Link
               href="/checkout"
-              className="flex-1 bg-gray-900 text-white text-center rounded-lg py-2.5 text-sm font-medium"
+              className="flex-1 bg-gray-900 text-white text-center rounded-lg py-2.5 text-sm font-medium hover hover:bg-orange-400"
             >
               COMMANDER
             </Link>
           </div>
-          <div className="bg-orange-50 rounded-lg p-3 text-sm text-gray-700">
+          <div className="bg-orange-50 rounded-lg p-3 text-sm text-gray-800">
             Dépensez 50 000 FCFA de plus et obtenez la livraison gratuite !
             <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
               <div
@@ -598,7 +598,7 @@ export default function ProductDetailPage({
 
       {similarProducts.length > 0 && (
         <div className="border-t border-gray-200 p-6">
-          <h3 className="text-center font-bold text-gray-900 mb-1">
+          <h3 className="text-center text-lg font-bold text-gray-900 mb-1">
             YOU MAY ALSO LIKE
           </h3>
           <div className="w-10 h-0.5 bg-orange-400 mx-auto mb-4"></div>

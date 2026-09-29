@@ -53,7 +53,7 @@ useEffect(() => {
 >
       
       <div className="flex items-center justify-between px-4 md:px-8 py-4 gap-3">
-  <Link href="/" className="text-xl font-bold text-gray-800 flex-shrink-0">
+  <Link href="/" className="text-2xl font-bold text-black flex-shrink-0">
     DIA
   </Link>
 
@@ -98,17 +98,17 @@ useEffect(() => {
        >
 
        <li>
-          <Link href="/" className="hover:text-orange-400">Accueil</Link>
+          <Link href="/" className="hover:text-orange-400 font-bold text-black text-lg">Accueil</Link>
         </li>
         <li>
-          <Link href="/produits" className="hover:text-orange-400">Catalogue</Link>
+          <Link href="/produits" className="hover:text-orange-400 font-bold text-black text-lg">Catalogue</Link>
         </li>
         <li
           className="relative"
           onMouseEnter={() => setShowDropdown(true)}
           onMouseLeave={() => setShowDropdown(false)}
         >
-          <Link href="/categories" className=" hover:text-orange-400 block py-2">
+          <Link href="/categories" className=" hover:text-orange-400 block py-2 font-bold text-black text-lg">
             Categories
           </Link>
 
