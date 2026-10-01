@@ -46,13 +46,15 @@ export default function ProductDetailPage({
     });
   }, [params]);
 
-  useEffect(() => {
-    function handleScroll() {
-      setShowFloatingBar(window.scrollY > 400);
-    }
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+ useEffect(() => {
+  function handleScroll() {
+    const nearBottom =
+      window.innerHeight + window.scrollY >= document.body.scrollHeight - 300;
+    setShowFloatingBar(window.scrollY > 400 && !nearBottom);
+  }
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
 
   if (!product) {
     return <div>Chargement...</div>;
@@ -102,7 +104,7 @@ export default function ProductDetailPage({
 </div>
 
           <div>
-            <h1 className="text-2xl font-bold text-orange-400 mb-2">
+            <h1 className="text-3xl font-black text-orange-400 mb-2">
               {product.name}
             </h1>
             <p className="text-2xl text-black font-semibold mb-4">
@@ -137,17 +139,17 @@ export default function ProductDetailPage({
 
             <div className="mb-6">
               <p className="font-medium text-gray-900 mb-2">Quantité</p>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 text-black">
                 <button
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="hover:text-orange-400 w-9 h-9 rounded-lg border border-black flex items-center justify-center"
+                  className="hover:text-orange-400 w-9 h-9 rounded-lg border border-black flex items-center justify-center text-black"
                 >
                   <Minus size={16} />
                 </button>
                 <span className="w-8 text-center">{quantity}</span>
                 <button
                   onClick={() => setQuantity((q) => q + 1)}
-                  className="hover:text-orange-400 w-9 h-9 rounded-lg border border-black flex items-center justify-center"
+                  className="hover:text-orange-400 w-9 h-9 rounded-lg border border-black flex items-center justify-center text-black"
                 >
                   <Plus size={16} />
                 </button>
@@ -157,7 +159,7 @@ export default function ProductDetailPage({
 
             <button
               onClick={handleAddToCart}
-              className="w-full bg-orange-400 text-white rounded-lg px-6 py-3 font-medium mb-6"
+              className="w-full bg-orange-400 text-white rounded-lg px-6 py-3 font-bold mb-6"
             >
               AJOUTER AU PANIER
             </button>
@@ -168,10 +170,10 @@ export default function ProductDetailPage({
                   <Truck size={18} />
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900 text-sm mb-2">
+                  <p className="font-bold text-black text-sm mb-2">
                     Livraison partout à Libreville
                   </p>
-                  <p className="text-gray-500 text-xs">
+                  <p className="text-gray-600 text-xs">
                     2 000 FCFA, offerte dès 50 000 FCFA d'achat
                   </p>
                 </div>
@@ -182,11 +184,11 @@ export default function ProductDetailPage({
                   <CreditCard size={18} />
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900 text-sm mb-1">
+                  <p className="font-bold text-black text-sm mb-1">
                     Payez comme vous voulez
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    <span className="bg-gray-100 text-xs text-black px-2 py-1 rounded-full">
+                    <span className="bg-gray-100 text-xs font-medium text-black px-2 py-1 rounded-full">
                       Airtel Money
                     </span>
                     <span className="bg-gray-100 text-xs text-black px-2 py-1 rounded-full">
@@ -204,7 +206,7 @@ export default function ProductDetailPage({
                   <MessageCircle size={18} />
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900 text-sm">
+                  <p className="font-bold text-black text-sm">
                     Une question avant de commander ?
                   </p>
                   <a href="#" className="text-blue-600 text-xs hover:underline">
@@ -289,7 +291,7 @@ export default function ProductDetailPage({
           {product.price} FCFA
         </span>
         <p className="text-gray-400 text-sm">
-          Livraison 2 000 FCFA partout au Sénégal
+          Livraison 2 000 FCFA partout à Libreville
         </p>
       </div>
     </div>
@@ -627,15 +629,15 @@ export default function ProductDetailPage({
 
       {showLocationModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white  max-w-md w-full overflow-hidden">
-            <div className="flex items-center justify-between p-7 border-b border-gray-200">
+          <div className="bg-white  max-w-lg w-full overflow-hidden">
+            <div className="flex items-center justify-between p-7 border-b border-gray-200 bg-gray-50">
               <div>
                 <p className="font-medium text-gray-900">{product.name}</p>
                 <p className="text-gray-500 text-sm">{selectedSize}</p>
                 <p className="text-gray-900 text-sm">{product.price} FCFA</p>
               </div>
               <button onClick={() => setShowLocationModal(false)}>
-                <X size={20} className="text-gray-500" />
+                <X size={20} className="text-gray-500 hover hover:text-orange-400" />
               </button>
             </div>
 
@@ -665,7 +667,7 @@ export default function ProductDetailPage({
               </div>
 
               
-                <a href="CFHC+HHJ, Libreville, Gabon"
+                <a href="https://maps.app.goo.gl/VfDQ61SnMEzDFmc58"
                 className="flex items-center gap-2 text-orange-600 text-sm hover:underline"
               >
                 <Map size={16} />

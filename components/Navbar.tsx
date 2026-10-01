@@ -1,6 +1,6 @@
 "use client";
 
-import { getCategoriesPublic } from "@/lib/api";
+import { getCategoriesPublic, getCart } from "@/lib/api";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -12,6 +12,7 @@ export default function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [search, setSearch] = useState("");
   const router = useRouter();
+  const [cartCount, setCartCount] = useState(0);
 
 const [showNavbar, setShowNavbar] = useState(true);
 const [lastScrollY, setLastScrollY] = useState(0);
@@ -32,6 +33,24 @@ useEffect(() => {
   window.addEventListener("scroll", handleScroll);
   return () => window.removeEventListener("scroll", handleScroll);
 }, [lastScrollY]);
+
+useEffect(() => {
+  getCategoriesPublic().then((data) => setCategories(data));
+}, []);
+
+    useEffect(() => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    getCart(token).then((data) => {
+      const count = data.cart.items.reduce(
+        (sum: number, item: any) => sum + item.quantity,
+        0
+      );
+      setCartCount(count);
+    });
+  }
+}, []);
+
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -72,13 +91,20 @@ useEffect(() => {
   </form>
 
   <div className="flex items-center gap-3 md:gap-4 flex-shrink-0">
-    <Link href="/favoris" className="text-gray-600 hover:text-blue-600">
+    <Link href="/favoris" className="text-gray-600 hover:text-orange-400">
       <Heart size={20} />
     </Link>
-    <Link href="/panier" className="text-gray-600 hover:text-blue-600">
-      <ShoppingCart size={20} />
-    </Link>
-    <Link href="/profil" className="text-gray-600 hover:text-blue-600">
+
+    <Link href="/panier" className="relative text-gray-600 hover:text-orange-400">
+  <ShoppingCart size={20} />
+  {cartCount > 0 && (
+    <span className="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+      {cartCount}
+    </span>
+  )}
+      </Link>
+
+    <Link href="/profil" className="text-gray-600 hover:text-orange-400">
       <User size={20} />
     </Link>
     <button
@@ -98,17 +124,17 @@ useEffect(() => {
        >
 
        <li>
-          <Link href="/" className="hover:text-orange-400 font-bold text-black text-lg">Accueil</Link>
+          <Link href="/" className="hover:text-orange-400  text-black text-lg">Accueil</Link>
         </li>
         <li>
-          <Link href="/produits" className="hover:text-orange-400 font-bold text-black text-lg">Catalogue</Link>
+          <Link href="/produits" className="hover:text-orange-400  text-black text-lg">Catalogue</Link>
         </li>
         <li
           className="relative"
           onMouseEnter={() => setShowDropdown(true)}
           onMouseLeave={() => setShowDropdown(false)}
         >
-          <Link href="/categories" className=" hover:text-orange-400 block py-2 font-bold text-black text-lg">
+          <Link href="/categories" className=" hover:text-orange-400 block py-2  text-black text-lg">
             Categories
           </Link>
 
@@ -118,7 +144,7 @@ useEffect(() => {
                 <Link
                   key={category.id}
                   href={`/produits?category_id=${category.id}`}
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-50"
+                  className="block px-4 py-2 text-gray-700 hover:bg-orange-300"
                 >
                   {category.name}
                 </Link>
