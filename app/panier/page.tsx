@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
-import { getCart, removeFromCart, getCategoryImage } from "@/lib/api";
+import { getCart, removeFromCart, getCategoryImage,updateCartItem  } from "@/lib/api";
 import Link from "next/link";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -22,6 +22,30 @@ export default function PanierPage() {
     }
     getCart(token).then((data) => setCart(data));
   }, [router]);
+
+ function handleUpdateQuantity(itemId: number, newQuantity: number) {
+  if (newQuantity < 1) return;
+
+  setCart((prevCart: any) => {
+    const updatedItems = prevCart.cart.items.map((item: any) =>
+      item.id === itemId ? { ...item, quantity: newQuantity } : item
+    );
+    const newTotal = updatedItems.reduce(
+      (sum: number, item: any) => sum + item.quantity * Number(item.product.price),
+      0
+    );
+    return {
+      ...prevCart,
+      cart: { ...prevCart.cart, items: updatedItems },
+      total: newTotal,
+    };
+  });
+
+  const token = localStorage.getItem("token");
+  updateCartItem(token!, itemId, newQuantity);
+}
+
+ 
 
   async function handleRemove(itemId: number) {
     const token = localStorage.getItem("token");
@@ -69,9 +93,9 @@ export default function PanierPage() {
                 {cart.cart.items.map((item: any) => (
                   <div
                     key={item.id}
-                    className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm flex items-center gap-4"
+                    className="bg-white rounded-xl border border-gray-200 p-7 shadow-sm flex items-center gap-4"
                   >
-                    <div className="relative w-20 h-20 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                    <div className="relative w-30 h-30 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
                       {getCategoryImage(item.product.category?.name) ? (
                         <Image
                           src={getCategoryImage(item.product.category?.name)!}
@@ -90,16 +114,23 @@ export default function PanierPage() {
                         {item.product.price} FCFA
                       </p>
                       <div className="flex items-center gap-2">
-                        <button className="w-7 h-7 rounded-lg border border-gray-300 flex items-center justify-center">
+                        <button
+                          onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
+                          className="w-7 h-7 rounded-lg hover hover:text-orange-400 text-black border border-black flex items-center justify-center"
+                        >
                           <Minus size={12} />
                         </button>
-                        <span className="w-6 text-center text-sm">
-                          {item.quantity}
-                        </span>
-                        <button className="w-7 h-7 rounded-lg border border-gray-300 flex items-center justify-center">
-                          <Plus size={12} />
-                        </button>
-                      </div>
+                       <span className="w-6 text-center text-black text-sm">
+                         {item.quantity}
+                       </span>
+                       <button
+                          onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
+                          className="w-7 h-7 rounded-lg hover hover:text-orange-400 text-black border border-black flex items-center justify-center"
+                        >
+                         <Plus size={12} />
+                      </button>
+                    </div>
+
                     </div>
 
                     <div className="text-right">
@@ -135,7 +166,7 @@ export default function PanierPage() {
                 </div>
                 <Link
                   href="/checkout"
-                  className="block text-center bg-blue-600 text-white rounded-lg px-6 py-3 font-medium"
+                  className="block text-center bg-black hover hover:bg-orange-400 text-white rounded-lg px-6 py-3 font-medium"
                 >
                   Passer la commande
                 </Link>
