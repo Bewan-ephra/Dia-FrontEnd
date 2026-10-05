@@ -98,7 +98,9 @@ export default function CheckoutPage() {
                   </div>
 
                   {deliveryMode === "shipping" && (
+                    
                     <div className="flex flex-col gap-3">
+                      <h2 className="font-bold text-gray-900 mb-3 mt-4">Coordonnées</h2>
                       <div className="grid grid-cols-2 gap-3">
                         <input
                           type="text"
@@ -148,7 +150,7 @@ export default function CheckoutPage() {
   <div>
     <h2 className="font-bold text-gray-900 mb-3">Mode d'expédition</h2>
     <div className="border border-blue-600 bg-blue-50 rounded-lg flex items-center justify-between px-4 py-3">
-      <p className="text-sm text-gray-900">Nouveau Tarif partout au Sénégal</p>
+      <p className="text-sm text-gray-900">Nouveau Tarif partout à Libreville</p>
       <p className="text-sm text-gray-900">{shippingCost.toLocaleString()} F CFA</p>
     </div>
   </div>
@@ -166,8 +168,33 @@ export default function CheckoutPage() {
       </div>
       <p className="text-gray-400 text-xs">Habituellement prête en 1 heure</p>
     </div>
+     <h2 className="font-bold text-gray-900 mb-3 mt-4">Coordonnées</h2>
+     <div className="grid grid-cols-2 gap-3 mb-3">
+      <input
+        type="text"
+        placeholder="Prénom"
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+        className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900"
+      />
+      <input
+        type="text"
+        placeholder="Nom"
+        value={lastName}
+        onChange={(e) => setLastName(e.target.value)}
+        className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900"
+      />
+    </div>
+    <input
+      type="tel"
+      placeholder="Téléphone"
+      value={phone}
+      onChange={(e) => setPhone(e.target.value)}
+      className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 w-full"
+    />
   </div>
 )}
+
 
                 <div>
                   <h2 className="font-bold text-gray-900 mb-1">Paiement</h2>
@@ -214,53 +241,6 @@ export default function CheckoutPage() {
                     )}
                   </div>
                 </div>
-
-                <div>
-  <h2 className="font-bold text-gray-900 mb-3">Vos coordonnées</h2>
-  <div className="flex flex-col gap-3">
-    <div className="grid grid-cols-2 gap-3">
-      <input
-        type="text"
-        placeholder="Prénom"
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
-        className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900"
-      />
-      <input
-        type="text"
-        placeholder="Nom"
-        value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
-        className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900"
-      />
-    </div>
-    <input
-      type="text"
-      placeholder="Adresse"
-      value={address}
-      onChange={(e) => setAddress(e.target.value)}
-      className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900"
-    />
-    <input
-      type="text"
-      placeholder="Ville"
-      value={city}
-      onChange={(e) => setCity(e.target.value)}
-      className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900"
-    />
-    <input
-      type="tel"
-      placeholder="Téléphone"
-      value={phone}
-      onChange={(e) => setPhone(e.target.value)}
-      className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900"
-    />
-    <label className="flex items-center gap-2 text-sm text-gray-600">
-      <input type="checkbox" />
-      Sauvegarder mes coordonnées pour la prochaine fois
-    </label>
-  </div>
-</div>
 
                 <button
                   type="button"
