@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import Image from "next/image";
 import { getCart, getCategoryImage } from "@/lib/api";
 import { Truck, MapPin, X, ShoppingBag } from "lucide-react";
+import ChampTelephone from "@/components/ChampTelephone";
 
 export default function CheckoutPage() {
   const [cart, setCart] = useState<any>(null);
@@ -131,13 +132,9 @@ export default function CheckoutPage() {
                         onChange={(e) => setCity(e.target.value)}
                         className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900"
                       />
-                      <input
-                        type="tel"
-                        placeholder="Téléphone"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900"
-                      />
+
+                      <ChampTelephone value={phone} onChange={(e) => setPhone(e.target.value)} />
+
                       <label className="flex items-center gap-2 text-sm text-gray-600">
                         <input type="checkbox" />
                         Sauvegarder mes coordonnées pour la prochaine fois
@@ -185,13 +182,9 @@ export default function CheckoutPage() {
         className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900"
       />
     </div>
-    <input
-      type="tel"
-      placeholder="Téléphone"
-      value={phone}
-      onChange={(e) => setPhone(e.target.value)}
-      className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 w-full"
-    />
+    
+    <ChampTelephone value={phone} onChange={(e) => setPhone(e.target.value)} />
+
   </div>
 )}
 
