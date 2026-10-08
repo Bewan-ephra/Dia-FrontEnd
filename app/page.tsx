@@ -85,7 +85,7 @@ useEffect(() => {
     className="object-cover group-hover:scale-105 transition"
   />
   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent flex flex-col items-center justify-end p-3 text-center">
-    <p className="font-bold text-white text-2xl mb-3">Sur commande</p>
+    <p className="font-bold text-white text-2xl mb-3">Parcourir les produits</p>
 
   </div>
 </Link>

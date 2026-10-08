@@ -264,7 +264,7 @@ export default function CommandeDetailPage({
               <p className="font-medium text-gray-900 text-sm">
                 Une question sur cette commande ?
               </p>
-              <a href="#" className="text-blue-600 text-xs hover:underline">
+              <a href="https://wa.me/24160348225" className="text-blue-600 text-xs hover:underline">
                 Un expert vous répond sur WhatsApp
               </a>
             </div>

@@ -209,7 +209,7 @@ export default function ProductDetailPage({
                   <p className="font-bold text-black text-sm">
                     Une question avant de commander ?
                   </p>
-                  <a href="#" className="text-blue-600 text-xs hover:underline">
+                  <a href="https://wa.me/24160348225" className="text-blue-600 text-xs hover:underline">
                     Un expert vous répond sur WhatsApp
                   </a>
                 </div>
