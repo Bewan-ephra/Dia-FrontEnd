@@ -10,6 +10,37 @@ import ScrollToTop from "@/components/ScrollToTop";
 
 const slides = ["/banners/banner1.png", "/banners/banner2.png", "/banners/banner3.png"];
 
+type Vignette = { href: string; image: string; label: string };
+
+const vignettesGauche: Vignette[] = [
+  { href: "/sur-commande", image: "/banners/sur-commande.png", label: "Sur commande" },
+  // { href: "/...", image: "/banners/....png", label: "..." },
+];
+
+const vignettesDroite: Vignette[] = [
+  { href: "/produits", image: "/banners/vignette-droite.png", label: "Parcourir les produits" },
+  // { href: "/...", image: "/banners/....png", label: "..." },
+];
+
+function CarteVignette({ href, image, label }: Vignette) {
+  return (
+    <Link
+      href={href}
+      className="relative h-28 md:h-auto md:flex-1 rounded-md overflow-hidden group"
+    >
+      <Image
+        src={image}
+        alt={label}
+        fill
+        className="object-cover group-hover:scale-105 transition"
+      />
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-fit max-w-full bg-gradient-to-r from-black/85 via-black/60 to-transparent py-3 pl-4 pr-10">
+        <p className="font-bold text-white text-lg leading-tight">{label}</p>
+      </div>
+    </Link>
+  );
+}
+
 export default function Home() {
   const [current, setCurrent] = useState(0);
 
@@ -32,23 +63,14 @@ useEffect(() => {
       <Navbar />
       <div className="bg-white min-h-screen">
         <div className="max-w-6xl mx-auto px-8 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-<Link
-  href="/sur-commande"
-  className="relative h-64 md:h-80 rounded-xl overflow-hidden group"
->
-  <Image
-    src="/banners/sur-commande.png"
-    alt="Sur commande"
-    fill
-    className="object-cover group-hover:scale-105 transition"
-  />
-  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent flex flex-col items-center justify-end p-3 text-center">
-    <p className="font-bold text-white text-2xl mb-3">Sur commande</p>
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_2.5fr_1fr] gap-5 md:h-80">
+  <div className="flex flex-col gap-5">
+    {vignettesGauche.map((v) => (
+      <CarteVignette key={v.href} {...v} />
+    ))}
   </div>
-</Link>
 
-  <div className="md:col-span-3 relative h-64 md:h-80 rounded-xl overflow-hidden">
+  <div className="relative h-64 md:h-full rounded-md overflow-hidden">
     {slides.map((slide, index) => (
       <Image
         key={slide}
@@ -56,7 +78,7 @@ useEffect(() => {
         alt="Bannière promotionnelle"
         fill
         className={`object-cover object-top transition-opacity duration-1000 ${
-       current === index ? "opacity-100" : "opacity-0"
+          current === index ? "opacity-100" : "opacity-0"
         }`}
       />
     ))}
@@ -74,23 +96,12 @@ useEffect(() => {
     </div>
   </div>
 
- <Link
-  href="/produits"
-  className="relative h-64 md:h-80 rounded-xl overflow-hidden group"
->
-  <Image
-    src="/banners/vignette-droite.png"
-    alt="Image promotionnelle"
-    fill
-    className="object-cover group-hover:scale-105 transition"
-  />
-  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent flex flex-col items-center justify-end p-3 text-center">
-    <p className="font-bold text-white text-2xl mb-3">Parcourir les produits</p>
-
+  <div className="flex flex-col gap-5">
+    {vignettesDroite.map((v) => (
+      <CarteVignette key={v.href} {...v} />
+    ))}
   </div>
-</Link>
-
-    </div>
+</div>
       <div className="mt-12">
   <h2 className="text-xl font-bold text-gray-900 mb-6">
     Catégories populaires
