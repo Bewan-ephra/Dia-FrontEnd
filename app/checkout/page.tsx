@@ -238,14 +238,14 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   onClick={() => setShowPaymentInfo(true)}
-                  className="text-orange-400 text-sm hover:underline text-left"
+                  className="text-pink-400 text-sm hover:underline text-left"
                 >
                   Mode d'emploi du paiement
                 </button>
 
                 <button
                   type="submit"
-                  className="bg-black text-white rounded-lg py-3 font-medium hover hover:bg-orange-400"
+                  className="bg-black text-white rounded-lg py-3 font-medium hover hover:bg-blue-400"
                 >
                   Valider le paiement
                 </button>

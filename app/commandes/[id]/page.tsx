@@ -115,18 +115,18 @@ export default function CommandeDetailPage({
         <div className="max-w-3xl mx-auto px-8 py-12">
           <Link
             href="/commandes"
-            className="inline-flex items-center gap-2 text-gray-500 hover:text-orange-500 text-sm mb-6 transition"
+            className="inline-flex items-center gap-2 text-gray-500 hover:text-blue-400 text-sm mb-6 transition"
           >
             <ArrowLeft size={16} />
             Retour à mes commandes
           </Link>
 
           <div className="bg-gradient-to-br from-black to-black rounded-2xl p-6 text-white relative overflow-hidden mb-8">
-            <div className="absolute -top-16 -right-16 w-48 h-48 bg-orange-500 rounded-full opacity-30 blur-3xl"></div>
+            <div className="absolute -top-16 -right-16 w-48 h-48 bg-pink-400 rounded-full opacity-30 blur-3xl"></div>
             <div className="relative z-10">
               <div className="flex items-start justify-between gap-4 mb-6">
                 <div>
-                  <p className="text-orange-400 text-xs font-semibold uppercase mb-1">
+                  <p className="text-pink-400 text-xs font-semibold uppercase mb-1">
                     Commande
                   </p>
                   <p className="text-2xl font-bold">#{order.id}</p>
@@ -178,9 +178,9 @@ export default function CommandeDetailPage({
                       <div
                         className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 border-2 ${
                           isDone
-                            ? "bg-orange-400 border-orange-400 text-white"
+                            ? "bg-pink-400 border-pink-400 text-white"
                             : isCurrent
-                            ? "bg-white border-orange-400 text-orange-500"
+                            ? "bg-white border-pink-400 text-pink-500"
                             : "bg-white border-gray-200 text-gray-300"
                         }`}
                       >
@@ -193,7 +193,7 @@ export default function CommandeDetailPage({
                       {!isLast && (
                         <div
                           className={`w-0.5 flex-1 min-h-8 ${
-                            isDone ? "bg-orange-400" : "bg-gray-200"
+                            isDone ? "bg-pink-400" : "bg-gray-200"
                           }`}
                         ></div>
                       )}
@@ -207,7 +207,7 @@ export default function CommandeDetailPage({
                       >
                         {step.title}
                         {isCurrent && (
-                          <span className="ml-2 bg-orange-50 text-orange-600 text-xs px-2 py-0.5 rounded-full">
+                          <span className="ml-2 bg-blue-50 text-pink-600 text-xs px-2 py-0.5 rounded-full">
                             En cours
                           </span>
                         )}
@@ -257,7 +257,7 @@ export default function CommandeDetailPage({
           </div>
 
           <div className="flex items-start gap-3 border border-gray-200 rounded-xl p-4">
-            <div className="bg-orange-50 text-orange-500 p-2 rounded-full">
+            <div className="bg-blue-50 text-pink-400 p-2 rounded-full">
               <MessageCircle size={18} />
             </div>
             <div>

@@ -166,7 +166,7 @@ export default function PanierPage() {
                 </div>
                 <Link
                   href="/checkout"
-                  className="block text-center bg-black hover hover:bg-orange-400 text-white rounded-lg px-6 py-3 font-medium"
+                  className="block text-center bg-black hover hover:bg-blue-400 text-white rounded-lg px-6 py-3 font-medium"
                 >
                   Passer la commande
                 </Link>

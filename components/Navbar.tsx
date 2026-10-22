@@ -61,7 +61,7 @@ useEffect(() => {
 
   return (
     <>
-      <div className="bg-orange-400 text-center py-2 text-sm text-white font-medium">
+      <div className="bg-pink-300 text-center py-2 text-sm text-white font-medium">
         🚚 ARTICLE ÉGALEMENT SUR COMMANDE 
       </div>
    
@@ -72,7 +72,7 @@ useEffect(() => {
 >
       
       <div className="flex items-center justify-between px-4 md:px-8 py-4 gap-3">
-  <Link href="/" className="text-2xl font-bold text-black flex-shrink-0">
+  <Link href="/" className="text-4xl font-bold text-black flex-shrink-0">
     DIA
   </Link>
 
@@ -91,20 +91,20 @@ useEffect(() => {
   </form>
 
   <div className="flex items-center gap-3 md:gap-4 flex-shrink-0">
-    <Link href="/favoris" className="text-gray-600 hover:text-orange-400">
+    <Link href="/favoris" className="text-gray-600 hover:text-blue-300">
       <Heart size={20} />
     </Link>
 
-    <Link href="/panier" className="relative text-gray-600 hover:text-orange-400">
+    <Link href="/panier" className="relative text-gray-600 hover:text-blue-300">
   <ShoppingCart size={20} />
   {cartCount > 0 && (
-    <span className="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+    <span className="absolute -top-2 -right-2 bg-blue-300 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
       {cartCount}
     </span>
   )}
       </Link>
 
-    <Link href="/profil" className="text-gray-600 hover:text-orange-400">
+    <Link href="/profil" className="text-gray-600 hover:text-blue-300">
       <User size={20} />
     </Link>
     <button
@@ -124,17 +124,17 @@ useEffect(() => {
        >
 
        <li>
-          <Link href="/" className="hover:text-orange-400  text-black text-lg">Accueil</Link>
+          <Link href="/" className="hover:text-blue-300  text-black text-lg">Accueil</Link>
         </li>
         <li>
-          <Link href="/produits" className="hover:text-orange-400  text-black text-lg">Catalogue</Link>
+          <Link href="/produits" className="hover:text-blue-300  text-black text-lg">Catalogue</Link>
         </li>
         <li
           className="relative"
           onMouseEnter={() => setShowDropdown(true)}
           onMouseLeave={() => setShowDropdown(false)}
         >
-          <Link href="/categories" className=" hover:text-orange-400 block py-2  text-black text-lg">
+          <Link href="/categories" className=" hover:text-blue-300 block py-2  text-black text-lg">
             Categories
           </Link>
 
@@ -144,7 +144,7 @@ useEffect(() => {
                 <Link
                   key={category.id}
                   href={`/produits?category_id=${category.id}`}
-                  className="block px-4 py-2 text-gray-700 hover:bg-orange-300"
+                  className="block px-4 py-2 text-gray-700 hover:bg-blue-300"
                 >
                   {category.name}
                 </Link>

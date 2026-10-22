@@ -105,7 +105,7 @@ export default function MesCommandesPage() {
                   <Link
                     key={order.id}
                     href={`/commandes/${order.id}`}
-                    className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md hover:border-orange-300 transition"
+                    className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md hover:border-blue-300 transition"
                   >
                     <div className="flex items-start justify-between gap-4 mb-4">
                       <div>
@@ -158,7 +158,7 @@ export default function MesCommandesPage() {
                           {order.total.toLocaleString()} FCFA
                         </span>
                       </p>
-                      <span className="flex items-center gap-1 text-orange-500 text-sm font-medium">
+                      <span className="flex items-center gap-1 text-pink-500 text-sm font-medium">
                         Voir le détail
                         <ChevronRight size={16} />
                       </span>

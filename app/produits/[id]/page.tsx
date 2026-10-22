@@ -104,7 +104,7 @@ export default function ProductDetailPage({
 </div>
 
           <div>
-            <h1 className="text-3xl font-black text-orange-400 mb-2">
+            <h1 className="text-3xl font-black text-blue-300 mb-2">
               {product.name}
             </h1>
             <p className="text-2xl text-black font-semibold mb-4">
@@ -142,14 +142,14 @@ export default function ProductDetailPage({
               <div className="flex items-center gap-3 text-black">
                 <button
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="hover:text-orange-400 w-9 h-9 rounded-lg border border-black flex items-center justify-center text-black"
+                  className="hover:text-blue-300 w-9 h-9 rounded-lg border border-black flex items-center justify-center text-black"
                 >
                   <Minus size={16} />
                 </button>
                 <span className="w-8 text-center">{quantity}</span>
                 <button
                   onClick={() => setQuantity((q) => q + 1)}
-                  className="hover:text-orange-400 w-9 h-9 rounded-lg border border-black flex items-center justify-center text-black"
+                  className="hover:text-blue-300 w-9 h-9 rounded-lg border border-black flex items-center justify-center text-black"
                 >
                   <Plus size={16} />
                 </button>
@@ -159,14 +159,14 @@ export default function ProductDetailPage({
 
             <button
               onClick={handleAddToCart}
-              className="w-full bg-orange-400 text-white rounded-lg px-6 py-3 font-bold mb-6"
+              className="w-full bg-blue-300 text-white rounded-lg px-6 py-3 font-bold mb-6"
             >
               AJOUTER AU PANIER
             </button>
 
             <div className="border border-gray-200 rounded-xl divide-y divide-gray-200 mb-5">
               <div className="flex items-start gap-3 p-4">
-                <div className="bg-orange-50 text-orange-500 p-2 rounded-full">
+                <div className="bg-blue-50 text-pink-300 p-2 rounded-full">
                   <Truck size={18} />
                 </div>
                 <div>
@@ -180,7 +180,7 @@ export default function ProductDetailPage({
               </div>
 
               <div className="flex items-start gap-3 p-4">
-                <div className="bg-orange-50 text-orange-500 p-2 rounded-full">
+                <div className="bg-blue-50 text-pink-300 p-2 rounded-full">
                   <CreditCard size={18} />
                 </div>
                 <div>
@@ -202,7 +202,7 @@ export default function ProductDetailPage({
               </div>
 
               <div className="flex items-start gap-3 p-4">
-                <div className="bg-orange-50 text-orange-500 p-2 rounded-full">
+                <div className="bg-blue-50 text-pink-300 p-2 rounded-full">
                   <MessageCircle size={18} />
                 </div>
                 <div>
@@ -240,7 +240,7 @@ export default function ProductDetailPage({
                 <p className="text-gray-700 text-sm mb-3">
                   Soyez le premier à écrire un avis
                 </p>
-                <button className="bg-amber-500 text-white text-sm font-medium px-5 py-2 rounded-lg">
+                <button className="bg-pink-400 text-white text-sm font-medium px-5 py-2 rounded-lg">
                   Écrire un avis
                 </button>
               </div>
@@ -257,8 +257,8 @@ export default function ProductDetailPage({
   </div>
 
     <div className="bg-gradient-to-br from-black via-black to-black rounded-2xl p-8 text-white relative overflow-hidden">
-    <div className="absolute -top-20 -right-20 w-64 h-64 bg-orange-500 rounded-full opacity-30 blur-3xl"></div>
-      <p className="text-orange-400 text-xs font-semibold uppercase mb-2">
+    <div className="absolute -top-20 -right-20 w-64 h-64 bg-pink-400 rounded-full opacity-30 blur-3xl"></div>
+      <p className="text-pink-400 text-xs font-semibold uppercase mb-2">
         {product.category?.name} · Description
       </p>
       <h2 className="text-2xl font-bold mb-4">{product.name}</h2>
@@ -266,9 +266,9 @@ export default function ProductDetailPage({
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {product.specs.map((spec: any, index: number) => (
-          <div key={index} className="bg-gray-800 rounded-xl p-4">
+          <div key={index} className="bg-blue-300 rounded-xl p-4">
             <p className="text-2xl font-bold">{spec.value}</p>
-            <p className="text-gray-400 text-sm">{spec.label}</p>
+            <p className="text-black text-sm">{spec.label}</p>
           </div>
         ))}
       </div>
@@ -278,7 +278,7 @@ export default function ProductDetailPage({
           {product.features.map((feature: string, index: number) => (
             <span
               key={index}
-              className="bg-gray-800 text-sm px-4 py-2 rounded-full"
+              className="bg-blue-300 text-sm px-4 py-2 rounded-full"
             >
               {feature}
             </span>
@@ -287,7 +287,7 @@ export default function ProductDetailPage({
       )}
 
       <div className="flex items-center gap-4 pt-4 border-t border-gray-700">
-        <span className="bg-orange-500 font-bold px-4 py-2 rounded-full">
+        <span className="bg-pink-400 font-bold px-4 py-2 rounded-full">
           {product.price} FCFA
         </span>
         <p className="text-gray-400 text-sm">
@@ -301,8 +301,8 @@ export default function ProductDetailPage({
 
   {product.summary && (
   <div className="max-w-6xl mx-auto px-8 pb-12">
-    <div className="border-l-4 border-orange-400 bg-white rounded-r-xl p-6 mb-8">
-      <p className="text-orange-500 text-xs font-semibold uppercase mb-1">
+    <div className="border-l-4 border-pink-400 bg-white rounded-r-xl p-6 mb-8">
+      <p className="text-pink-400 text-xs font-semibold uppercase mb-1">
         En bref
       </p>
       <p className="text-gray-700 text-sm">{product.summary}</p>
@@ -327,7 +327,7 @@ export default function ProductDetailPage({
                 key={index}
                 className="border border-gray-200 rounded-xl p-4"
               >
-                <div className="bg-orange-50 text-orange-500 w-9 h-9 rounded-lg flex items-center justify-center mb-3">
+                <div className="bg-blue-50 text-pink-400 w-9 h-9 rounded-lg flex items-center justify-center mb-3">
                   <Icon size={22} />
                 </div>
                 <p className="font-bold text-black mb-1">
@@ -348,7 +348,7 @@ export default function ProductDetailPage({
           {product.idealFor.map((item: string, index: number) => (
             <span
               key={index}
-              className="flex items-center gap-1 bg-orange-50 text-orange-700 text-sm px-3 py-1.5 rounded-full"
+              className="flex items-center gap-1 bg-blue-50 text-black text-sm px-3 py-1.5 rounded-full"
             >
               <Check size={14} />
               {item}
@@ -425,7 +425,7 @@ export default function ProductDetailPage({
     <h2 className="text-center font-bold text-black text-lg mb-1">
       PRODUITS SIMILAIRES
     </h2>
-    <div className="w-10 h-0.5 bg-orange-400 mx-auto mb-6"></div>
+    <div className="w-10 h-0.5 bg-pink-400 mx-auto mb-6"></div>
     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
       {similarProducts.map((p) => {
         const img = getCategoryImage(p.category?.name);
@@ -454,7 +454,7 @@ export default function ProductDetailPage({
     <h2 className="text-center font-bold text-black text-lg mb-1">
       PRODUITS RÉCEMMENT CONSULTÉS
     </h2>
-    <div className="w-10 h-0.5 bg-orange-400 mx-auto mb-6"></div>
+    <div className="w-10 h-0.5 bg-pink-400 mx-auto mb-6"></div>
     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
       {recentlyViewed.map((p) => {
         const img = getCategoryImage(p.category?.name);
@@ -491,7 +491,7 @@ export default function ProductDetailPage({
               </div>
               <div>
                 <p className="font-medium text-black text-sm">{product.name}</p>
-                <p className="text-orange-400 font-semibold text-sm">
+                <p className="text-pink-400 font-semibold text-sm">
                   {product.price} FCFA
                 </p>
               </div>
@@ -501,21 +501,21 @@ export default function ProductDetailPage({
   <div className="flex items-center gap-3 text-black">
     <button
       onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-      className="hover hover:text-orange-400 w-8 h-8 rounded-lg border border-black text-black flex items-center justify-center"
+      className="hover hover:text-pink-400 w-8 h-8 rounded-lg border border-black text-black flex items-center justify-center"
     >
       <Minus size={14} />
     </button>
     <span className="w-6 text-center text-sm">{quantity}</span>
     <button
       onClick={() => setQuantity((q) => q + 1)}
-      className="w-8 h-8 rounded-lg border border-black flex items-center justify-center text-black hover hover:text-orange-400"
+      className="w-8 h-8 rounded-lg border border-black flex items-center justify-center text-black hover hover:text-pink-400"
     >
       <Plus size={14} />
     </button>
   </div>
   <button
     onClick={handleAddToCart}
-    className="bg-black text-white hover hover:text-orange-400 rounded-lg p-2.5"
+    className="bg-black text-white hover hover:text-blue-400 rounded-lg p-2.5"
   >
     <ShoppingCart size={18} />
   </button>
@@ -535,7 +535,7 @@ export default function ProductDetailPage({
           </p>
         </div>
         <button onClick={() => setShowCartModal(false)}>
-          <X size={20} className="text-gray-500" />
+          <X size={20} className="text-gray-500 hover hover:text-pink-300" />
         </button>
       </div>
 
@@ -581,7 +581,7 @@ export default function ProductDetailPage({
             </Link>
             <Link
               href="/checkout"
-              className="flex-1 bg-gray-900 text-white text-center rounded-lg py-2.5 text-sm font-medium hover hover:bg-orange-400"
+              className="flex-1 bg-gray-900 text-white text-center rounded-lg py-2.5 text-sm font-medium hover hover:bg-blue-400"
             >
               COMMANDER
             </Link>
@@ -603,7 +603,7 @@ export default function ProductDetailPage({
           <h3 className="text-center text-lg font-bold text-gray-900 mb-1">
             YOU MAY ALSO LIKE
           </h3>
-          <div className="w-10 h-0.5 bg-orange-400 mx-auto mb-4"></div>
+          <div className="w-10 h-0.5 bg-pink-400 mx-auto mb-4"></div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {similarProducts.slice(0, 4).map((p) => {
               const img = getCategoryImage(p.category?.name);
@@ -637,7 +637,7 @@ export default function ProductDetailPage({
                 <p className="text-gray-900 text-sm">{product.price} FCFA</p>
               </div>
               <button onClick={() => setShowLocationModal(false)}>
-                <X size={20} className="text-gray-500 hover hover:text-orange-400" />
+                <X size={20} className="text-gray-500 hover hover:text-pink-400" />
               </button>
             </div>
 
@@ -668,7 +668,7 @@ export default function ProductDetailPage({
 
               
                 <a href="https://maps.app.goo.gl/VfDQ61SnMEzDFmc58"
-                className="flex items-center gap-2 text-orange-600 text-sm hover:underline"
+                className="flex items-center gap-2 text-pink-400 text-sm hover:underline"
               >
                 <Map size={16} />
                 Vérifiez ceci sur Google Maps
