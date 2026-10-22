@@ -99,21 +99,28 @@ export default function ProductsPage() {
                 <td className="p-3">{product.price}</td>
                 <td className="p-3">{product.stock}</td>
                 <td className="p-3">{product.category.name}</td>
+
                 <td className="p-3">
-                  <Link
-                    href={`/admin/produits/${product.id}`}
-                    className="text-blue-600 mr-3"
-                  >
-                    Modifier
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(product.id)}
-                    disabled={deletingId === product.id}
-                    className="text-red-600 disabled:opacity-50"
-                  >
-                    {deletingId === product.id ? "Suppression..." : "Supprimer"}
-                  </button>
-                </td>
+  <Link
+    href={`/admin/produits/${product.id}/voir`}
+    className="text-gray-600 mr-3"
+  >
+    Voir
+  </Link>
+  <Link
+    href={`/admin/produits/${product.id}`}
+    className="text-blue-600 mr-3"
+  >
+    Modifier
+  </Link>
+  <button
+    onClick={() => handleDelete(product.id)}
+    disabled={deletingId === product.id}
+    className="text-red-600 disabled:opacity-50"
+  >
+    {deletingId === product.id ? "Suppression..." : "Supprimer"}
+  </button>
+</td>
               </tr>
             ))}
           </tbody>

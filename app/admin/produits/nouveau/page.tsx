@@ -33,7 +33,7 @@ export default function NewProductPage() {
     setError(null);
 
     try {
-      await createProduct({
+      const newProduct = await createProduct({
         name,
         slug,
         description: description || undefined,
@@ -44,7 +44,9 @@ export default function NewProductPage() {
         category_id: Number(categoryId),
       });
       setSuccess(true);
-      setTimeout(() => router.push("/admin/produits"), 1000);
+      setTimeout(() => {
+        router.push(`/admin/produits/${newProduct.id}`);
+      }, 1000);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erreur lors de la création");
     } finally {
@@ -59,7 +61,11 @@ export default function NewProductPage() {
       {error && (
         <div className="bg-red-100 text-red-700 border border-red-300 rounded p-3 mb-4">{error}</div>
       )}
-      {success && <p className="text-green-600 mb-4">Produit ajouté avec succès !</p>}
+      {success && (
+        <p className="text-green-600 mb-4">
+          Produit ajouté avec succès ! Redirection pour ajouter des images...
+        </p>
+      )}
 
       <form className="flex flex-col gap-4 max-w-md" onSubmit={handleSubmit}>
         <input

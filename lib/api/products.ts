@@ -9,9 +9,12 @@ export interface Product {
   compare_price: string | null;
   stock: number;
   sku: string | null;
+  is_active: boolean;
   category: { id: number; name: string };
+  vendor?: { id: number; name: string; email: string; phone: string | null };
   images?: { id: number; url: string; order: number }[];
   variants?: { id: number; attribute: string; value: string; price_adjustment: string; stock: number; sku: string | null }[];
+  reviews?: { id: number; rating: number; comment: string | null; user: { id: number; name: string } }[];
 }
 
 interface ProductPayload {
