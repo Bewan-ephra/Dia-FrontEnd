@@ -82,7 +82,7 @@ export default function ProductDetailPage({
       <div className="bg-white min-h-screen">
         <div className="max-w-6xl mx-auto px-8 py-12 grid grid-cols-1 md:grid-cols-2 gap-10">
          <div>
-  <div className="relative h-[500px] rounded-xl overflow-hidden bg-gray-100 mb-3">
+  <div className="relative h-[700px] rounded-xl overflow-hidden bg-gray-100 mb-3">
     {image ? (
       <Image src={image} alt={product.name} fill className="object-cover" />
     ) : null}
@@ -93,7 +93,7 @@ export default function ProductDetailPage({
       <button
         key={index}
         onClick={() => setSelectedImage(index)}
-        className={`relative w-30 h-40 rounded-lg overflow-hidden border-2 ${
+        className={`relative w-40 h-50 rounded-lg overflow-hidden border-2 ${
           selectedImage === index ? "border-gray-900" : "border-gray-200"
         }`}
       >
@@ -144,14 +144,14 @@ export default function ProductDetailPage({
               <div className="flex items-center gap-3 text-black">
                 <button
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="hover:text-blue-300 w-9 h-9 rounded-lg border border-black flex items-center justify-center text-black"
+                  className="hover:text-pink-400 w-9 h-9 rounded-lg border border-black flex items-center justify-center text-black"
                 >
                   <Minus size={16} />
                 </button>
                 <span className="w-8 text-center">{quantity}</span>
                 <button
                   onClick={() => setQuantity((q) => q + 1)}
-                  className="hover:text-blue-300 w-9 h-9 rounded-lg border border-black flex items-center justify-center text-black"
+                  className="hover:text-pink-400 w-9 h-9 rounded-lg border border-black flex items-center justify-center text-black"
                 >
                   <Plus size={16} />
                 </button>
@@ -446,7 +446,7 @@ export default function ProductDetailPage({
             href={`/produits/${p.id}`}
             className="bg-white rounded-xl border border-gray-200 p-3 shadow-sm hover:shadow-md transition"
           >
-            <div className="relative h-32 rounded-lg overflow-hidden mb-2 bg-gray-100">
+            <div className="relative h-80 rounded-lg overflow-hidden mb-2 bg-gray-100">
               {img ? (
                 <Image src={img} alt={p.name} fill className="object-cover" />
               ) : null}
@@ -475,7 +475,7 @@ export default function ProductDetailPage({
             href={`/produits/${p.id}`}
             className="bg-white rounded-xl border border-gray-200 p-3 shadow-sm hover:shadow-md transition"
           >
-            <div className="relative h-32 rounded-lg overflow-hidden mb-2 bg-gray-100">
+            <div className="relative h-80 rounded-lg overflow-hidden mb-2 bg-gray-100">
               {img ? (
                 <Image src={img} alt={p.name} fill className="object-cover" />
               ) : null}
@@ -623,11 +623,15 @@ export default function ProductDetailPage({
                   key={p.id}
                   href={`/produits/${p.id}`}
                   onClick={() => setShowCartModal(false)}
-                  className="relative h-28 rounded-lg overflow-hidden bg-gray-100"
+                  className="bg-white rounded-xl relative w-50 h-50"
                 >
+                   <div className="relative h-80 rounded-lg overflow-hidden mb-2 bg-gray-100">
                   {img ? (
                     <Image src={img} alt={p.name} fill className="object-cover" />
                   ) : null}
+                  </div>
+                   <p className="font-medium text-gray-900 text-sm">{p.name}</p>
+                   <p className="font-bold text-black text-base">{p.price} FCFA</p>
                 </Link>
               );
             })}
