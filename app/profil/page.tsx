@@ -78,9 +78,9 @@ export default function ProfilPage() {
           <h1 className="text-2xl font-bold text-gray-900 mb-8">Mon profil</h1>
 
           <div className="bg-gradient-to-br from-black to-black rounded-2xl p-6 text-white relative overflow-hidden mb-6">
-            <div className="absolute -top-16 -right-16 w-48 h-48 bg-orange-500 rounded-full opacity-30 blur-3xl"></div>
+            <div className="absolute -top-16 -right-16 w-48 h-48 bg-pink-400 rounded-full opacity-30 blur-3xl"></div>
             <div className="relative z-10 flex items-center gap-5">
-              <div className="w-16 h-16 rounded-full bg-orange-400 flex items-center justify-center text-xl font-bold flex-shrink-0">
+              <div className="w-16 h-16 rounded-full bg-pink-400 flex items-center justify-center text-xl font-bold flex-shrink-0">
                 {initials}
               </div>
               <div>
@@ -106,9 +106,9 @@ export default function ProfilPage() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex items-center gap-4 bg-white rounded-xl border border-gray-200 p-4 shadow-sm hover:shadow-md hover:border-orange-300 transition"
+                  className="flex items-center gap-4 bg-white rounded-xl border border-gray-200 p-4 shadow-sm hover:shadow-md hover:border-blue-300 transition"
                 >
-                  <div className="bg-orange-50 text-orange-500 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="bg-blue-50 text-pink-400 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
                     <Icon size={18} />
                   </div>
                   <div className="flex-1">

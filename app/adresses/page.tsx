@@ -70,7 +70,7 @@ export default function AdressesPage() {
             </div>
             <button
               onClick={() => setShowModal(true)}
-              className="flex items-center gap-2 bg-gray-900 hover:bg-orange-400 text-white rounded-lg px-4 py-2.5 text-sm font-medium flex-shrink-0 transition"
+              className="flex items-center gap-2 bg-gray-900 hover:bg-blue-400 text-white rounded-lg px-4 py-2.5 text-sm font-medium flex-shrink-0 transition"
             >
               <Plus size={16} />
               Ajouter une adresse
@@ -96,11 +96,11 @@ export default function AdressesPage() {
                 return (
                   <div
                     key={address.id}
-                    className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:border-orange-300 transition"
+                    className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:border-blue-300 transition"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
-                        <div className="bg-orange-50 text-orange-500 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
+                        <div className="bg-blue-50 text-pink-400 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
                           <Icon size={18} />
                         </div>
                         <p className="font-bold text-gray-900">
@@ -189,7 +189,7 @@ export default function AdressesPage() {
               <button
                 type="submit"
                 disabled={!canSubmit}
-                className="bg-gray-900 hover:bg-orange-400 text-white rounded-lg py-3 font-medium transition disabled:bg-gray-300 disabled:cursor-not-allowed"
+                className="bg-gray-900 hover:bg-blue-300 text-white rounded-lg py-3 font-medium transition disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
                 Enregistrer l'adresse
               </button>

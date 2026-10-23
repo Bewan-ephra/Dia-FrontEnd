@@ -8,6 +8,7 @@ import { getProduct, addToCart, getCategoryImage, getProducts, trackRecentlyView
 import { CheckCircle, Minus, Plus, Truck, CreditCard, MessageCircle, X, MapPin, Phone, Map, Droplet, Shirt, Zap, Heart, Check, ShoppingCart } from "lucide-react";
 import ScrollToTop from "@/components/ScrollToTop";
 import Link from "next/link";
+import ReviewModal from "@/components/ReviewModal";
 
 
 export default function ProductDetailPage({
@@ -24,6 +25,7 @@ export default function ProductDetailPage({
   const [selectedImage, setSelectedImage] = useState(0);
   const [similarProducts, setSimilarProducts] = useState<any[]>([]);
   const [recentlyViewed, setRecentlyViewed] = useState<any[]>([]);
+  const [showReview, setShowReview] = useState(false);
 
   useEffect(() => {
     params.then(({ id }) => {
@@ -240,13 +242,22 @@ export default function ProductDetailPage({
                 <p className="text-gray-700 text-sm mb-3">
                   Soyez le premier à écrire un avis
                 </p>
-                <button className="bg-pink-400 text-white text-sm font-medium px-5 py-2 rounded-lg">
+                <button 
+                onClick={() => setShowReview(true)} 
+                className="bg-pink-400 text-white text-sm font-medium px-5 py-2 rounded-lg">
                   Écrire un avis
                 </button>
               </div>
             </div>
           </div>
         </div>
+
+        <ReviewModal
+  open={showReview}
+  onClose={() => setShowReview(false)}
+  productName={product.name}
+  productImage={image}
+/>
 
            {product.specs && (
   <div className="max-w-6xl mx-auto px-8 pb-12">

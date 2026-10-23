@@ -13,6 +13,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 export default function ProduitsPage() {
   const [products, setProducts] = useState<any[]>([]);
 
+
   useEffect(() => {
     getProducts().then((data) => setProducts(data));
   }, []);
