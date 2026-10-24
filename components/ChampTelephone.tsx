@@ -6,9 +6,10 @@ import { HelpCircle } from "lucide-react";
 type Props = {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  erreur?: boolean;
 };
 
-export default function ChampTelephone({ value, onChange }: Props) {
+export default function ChampTelephone({ value, onChange, erreur }: Props) {
   const [afficher, setAfficher] = useState(false);
 
   return (
@@ -18,7 +19,9 @@ export default function ChampTelephone({ value, onChange }: Props) {
         placeholder="Téléphone"
         value={value}
         onChange={onChange}
-        className="border border-gray-300 rounded-lg px-4 py-3 pr-12 text-gray-900 w-full"
+        className={`border rounded-lg px-4 py-3 pr-12 text-gray-900 w-full ${
+          erreur ? "border-red-500" : "border-gray-300"
+        }`}
       />
 
       {/* Conteneur de l'icône : sert de repère pour centrer la bulle */}

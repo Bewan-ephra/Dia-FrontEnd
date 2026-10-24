@@ -10,10 +10,15 @@ import { getCart, getCategoryImage } from "@/lib/api";
 import { Truck, MapPin, X, ShoppingBag } from "lucide-react";
 import ChampTelephone from "@/components/ChampTelephone";
 
+function Erreur({ message }: { message?: string }) {
+  if (!message) return null;
+  return <p className="text-red-500 text-xs mt-1">{message}</p>;
+}
+
 export default function CheckoutPage() {
   const [cart, setCart] = useState<any>(null);
   const [deliveryMode, setDeliveryMode] = useState<"shipping" | "pickup">("shipping");
-  const [paymentMethod, setPaymentMethod] = useState("wave");
+  const [paymentMethod, setPaymentMethod] = useState("");
   const [showPaymentInfo, setShowPaymentInfo] = useState(false);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
@@ -23,16 +28,82 @@ export default function CheckoutPage() {
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [phone, setPhone] = useState("");
+  const [contact, setContact] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+
+  function bordure(nom: string) {
+    return errors[nom] ? "border-red-500" : "border-gray-300";
+  }
+
+  function effacerErreur(nom: string) {
+    setErrors((prev) => ({ ...prev, [nom]: "" }));
+  }
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
     if (token) {
       getCart(token).then((data) => setCart(data));
     }
   }, []);
 
+  function validate() {
+    const e: Record<string, string> = {};
+
+    const estEmail = /^\S+@\S+\.\S+$/.test(contact.trim());
+    const estTel = contact.replace(/\D/g, "").length >= 8;
+    if (!estEmail && !estTel) {
+      e.contact = "Entre un e-mail valide ou un numéro de portable.";
+    }
+
+    if (!firstName.trim()) e.firstName = "Le prénom est obligatoire.";
+    if (!lastName.trim()) e.lastName = "Le nom est obligatoire.";
+
+    if (!isLoggedIn) {
+      const estEmail = /^\S+@\S+\.\S+$/.test(contact.trim());
+      const estTel = contact.replace(/\D/g, "").length >= 8;
+    if (!estEmail && !estTel) {
+      e.contact = "Entre un e-mail valide ou un numéro de portable.";
+      }
+    }
+
+    if (deliveryMode === "shipping") {
+      if (!address.trim()) e.address = "L'adresse est obligatoire.";
+      if (!city.trim()) e.city = "La ville est obligatoire.";
+    }
+
+    if (phone.replace(/\D/g, "").length < 8) {
+      e.phone = "Entre un numéro de téléphone valide.";
+    }
+
+    if (paymentMethod !== "Airtel Money" && paymentMethod !== "moov money") {
+      e.payment = "Choisis un mode de paiement.";
+    }
+
+    if (!cart || cart.cart.items.length === 0) {
+      e.cart = "Ton panier est vide.";
+    }
+
+    return e;
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    const found = validate();
+    setErrors(found);
+
+    if (Object.keys(found).length > 0) {
+      // Fait défiler jusqu'à la première erreur
+      setTimeout(() => {
+        document
+          .querySelector(".border-red-500")
+          ?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 50);
+      return;
+    }
+
     setSuccess(true);
     setTimeout(() => {
       router.push("/");
@@ -65,8 +136,14 @@ export default function CheckoutPage() {
                   <input
                     type="text"
                     placeholder="E-mail ou numéro de portable"
-                    className="border border-gray-300 rounded-lg px-4 py-3 w-full text-gray-900"
+                    value={contact}
+                    onChange={(e) => {
+                      setContact(e.target.value);
+                      effacerErreur("contact");
+                    }}
+                    className={`border rounded-lg px-4 py-3 w-full text-gray-900 ${bordure("contact")}`}
                   />
+                  <Erreur message={errors.contact} />
                 </div>
 
                 <div>
@@ -99,41 +176,76 @@ export default function CheckoutPage() {
                   </div>
 
                   {deliveryMode === "shipping" && (
-                    
                     <div className="flex flex-col gap-3">
                       <h2 className="font-bold text-gray-900 mb-3 mt-4">Coordonnées</h2>
                       <div className="grid grid-cols-2 gap-3">
-                        <input
-                          type="text"
-                          placeholder="Prénom"
-                          value={firstName}
-                          onChange={(e) => setFirstName(e.target.value)}
-                          className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900"
-                        />
-                        <input
-                          type="text"
-                          placeholder="Nom"
-                          value={lastName}
-                          onChange={(e) => setLastName(e.target.value)}
-                          className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900"
-                        />
+                        <div>
+                          <input
+                            type="text"
+                            placeholder="Prénom"
+                            value={firstName}
+                            onChange={(e) => {
+                              setFirstName(e.target.value);
+                              effacerErreur("firstName");
+                            }}
+                            className={`border rounded-lg px-4 py-3 w-full text-gray-900 ${bordure("firstName")}`}
+                          />
+                          <Erreur message={errors.firstName} />
+                        </div>
+                        <div>
+                          <input
+                            type="text"
+                            placeholder="Nom"
+                            value={lastName}
+                            onChange={(e) => {
+                              setLastName(e.target.value);
+                              effacerErreur("lastName");
+                            }}
+                            className={`border rounded-lg px-4 py-3 w-full text-gray-900 ${bordure("lastName")}`}
+                          />
+                          <Erreur message={errors.lastName} />
+                        </div>
                       </div>
-                      <input
-                        type="text"
-                        placeholder="Adresse"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                        className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Ville"
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                        className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900"
-                      />
 
-                      <ChampTelephone value={phone} onChange={(e) => setPhone(e.target.value)} />
+                      <div>
+                        <input
+                          type="text"
+                          placeholder="Adresse"
+                          value={address}
+                          onChange={(e) => {
+                            setAddress(e.target.value);
+                            effacerErreur("address");
+                          }}
+                          className={`border rounded-lg px-4 py-3 w-full text-gray-900 ${bordure("address")}`}
+                        />
+                        <Erreur message={errors.address} />
+                      </div>
+
+                      <div>
+                        <input
+                          type="text"
+                          placeholder="Ville"
+                          value={city}
+                          onChange={(e) => {
+                            setCity(e.target.value);
+                            effacerErreur("city");
+                          }}
+                          className={`border rounded-lg px-4 py-3 w-full text-gray-900 ${bordure("city")}`}
+                        />
+                        <Erreur message={errors.city} />
+                      </div>
+
+                      <div>
+                        <ChampTelephone
+                          value={phone}
+                          onChange={(e) => {
+                            setPhone(e.target.value);
+                            effacerErreur("phone");
+                          }}
+                          erreur={!!errors.phone}
+                        />
+                        <Erreur message={errors.phone} />
+                      </div>
 
                       <label className="flex items-center gap-2 text-sm text-gray-600">
                         <input type="checkbox" />
@@ -143,58 +255,79 @@ export default function CheckoutPage() {
                   )}
                 </div>
 
-               {deliveryMode === "shipping" ? (
-  <div>
-    <h2 className="font-bold text-gray-900 mb-3">Mode d'expédition</h2>
-    <div className="border border-blue-600 bg-blue-50 rounded-lg flex items-center justify-between px-4 py-3">
-      <p className="text-sm text-gray-900">Nouveau Tarif partout à Libreville</p>
-      <p className="text-sm text-gray-900">{shippingCost.toLocaleString()} F CFA</p>
-    </div>
-  </div>
-) : (
-  <div>
-    <p className="text-gray-500 text-sm mb-3">
-      Il y a 1 emplacement disponible pour votre article
-    </p>
-    <div className="border border-gray-300 rounded-lg px-4 py-3">
-      <div className="flex items-center justify-between mb-1">
-        <p className="font-medium text-gray-900 text-sm">
-          NZENG-AYONG, Carrefour GP
-        </p>
-        <p className="text-green-600 text-sm font-medium">GRATUIT</p>
-      </div>
-      <p className="text-gray-400 text-xs">Habituellement prête en 1 heure</p>
-    </div>
-     <h2 className="font-bold text-gray-900 mb-3 mt-4">Coordonnées</h2>
-     <div className="grid grid-cols-2 gap-3 mb-3">
-      <input
-        type="text"
-        placeholder="Prénom"
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
-        className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900"
-      />
-      <input
-        type="text"
-        placeholder="Nom"
-        value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
-        className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900"
-      />
-    </div>
-    
-    <ChampTelephone value={phone} onChange={(e) => setPhone(e.target.value)} />
+                {deliveryMode === "shipping" ? (
+                  <div>
+                    <h2 className="font-bold text-gray-900 mb-3">Mode d'expédition</h2>
+                    <div className="border border-blue-600 bg-blue-50 rounded-lg flex items-center justify-between px-4 py-3">
+                      <p className="text-sm text-gray-900">Nouveau Tarif partout à Libreville</p>
+                      <p className="text-sm text-gray-900">{shippingCost.toLocaleString()} F CFA</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="text-gray-500 text-sm mb-3">
+                      Il y a 1 emplacement disponible pour votre article
+                    </p>
+                    <div className="border border-gray-300 rounded-lg px-4 py-3">
+                      <div className="flex items-center justify-between mb-1">
+                        <p className="font-medium text-gray-900 text-sm">
+                          NZENG-AYONG, Carrefour GP
+                        </p>
+                        <p className="text-green-600 text-sm font-medium">GRATUIT</p>
+                      </div>
+                      <p className="text-gray-400 text-xs">Habituellement prête en 1 heure</p>
+                    </div>
 
-  </div>
-)}
+                    <h2 className="font-bold text-gray-900 mb-3 mt-4">Coordonnées</h2>
+                    <div className="grid grid-cols-2 gap-3 mb-3">
+                      <div>
+                        <input
+                          type="text"
+                          placeholder="Prénom"
+                          value={firstName}
+                          onChange={(e) => {
+                            setFirstName(e.target.value);
+                            effacerErreur("firstName");
+                          }}
+                          className={`border rounded-lg px-4 py-3 w-full text-gray-900 ${bordure("firstName")}`}
+                        />
+                        <Erreur message={errors.firstName} />
+                      </div>
+                      <div>
+                        <input
+                          type="text"
+                          placeholder="Nom"
+                          value={lastName}
+                          onChange={(e) => {
+                            setLastName(e.target.value);
+                            effacerErreur("lastName");
+                          }}
+                          className={`border rounded-lg px-4 py-3 w-full text-gray-900 ${bordure("lastName")}`}
+                        />
+                        <Erreur message={errors.lastName} />
+                      </div>
+                    </div>
 
+                    <div>
+                      <ChampTelephone
+                        value={phone}
+                        onChange={(e) => {
+                          setPhone(e.target.value);
+                          effacerErreur("phone");
+                        }}
+                        erreur={!!errors.phone}
+                      />
+                      <Erreur message={errors.phone} />
+                    </div>
+                  </div>
+                )}
 
                 <div>
                   <h2 className="font-bold text-gray-900 mb-1">Paiement</h2>
                   <p className="text-gray-500 text-sm mb-3">
                     Toutes les transactions sont sécurisées et chiffrées.
                   </p>
-                  <div className="border border-gray-300 rounded-lg overflow-hidden">
+                  <div className={`border rounded-lg overflow-hidden ${bordure("payment")}`}>
                     <label
                       className={`flex items-center gap-3 px-4 py-3 cursor-pointer border-b border-gray-300 ${
                         paymentMethod === "Airtel Money" ? "bg-blue-50" : ""
@@ -204,7 +337,10 @@ export default function CheckoutPage() {
                         type="radio"
                         name="payment"
                         checked={paymentMethod === "Airtel Money"}
-                        onChange={() => setPaymentMethod("Airtel Money")}
+                        onChange={() => {
+                          setPaymentMethod("Airtel Money");
+                          effacerErreur("payment");
+                        }}
                       />
                       <span className="text-sm font-medium text-gray-900">Paiement via Airtel Money</span>
                     </label>
@@ -223,16 +359,21 @@ export default function CheckoutPage() {
                         type="radio"
                         name="payment"
                         checked={paymentMethod === "moov money"}
-                        onChange={() => setPaymentMethod("moov money")}
+                        onChange={() => {
+                          setPaymentMethod("moov money");
+                          effacerErreur("payment");
+                        }}
                       />
                       <span className="text-sm font-medium text-gray-900">Paiement via Moov Money</span>
                     </label>
+
                     {paymentMethod === "moov money" && (
                       <div className="bg-gray-50 px-4 py-3 text-sm text-gray-600">
                         Paiement obligatoire pour confirmer votre commande. Vous recevrez un lien de paiement sécurisé directement par WhatsApp.
                       </div>
                     )}
                   </div>
+                  <Erreur message={errors.payment} />
                 </div>
 
                 <button
@@ -243,12 +384,15 @@ export default function CheckoutPage() {
                   Mode d'emploi du paiement
                 </button>
 
-                <button
-                  type="submit"
-                  className="bg-black text-white rounded-lg py-3 font-medium hover hover:bg-blue-400"
-                >
-                  Valider le paiement
-                </button>
+                <div>
+                  <Erreur message={errors.cart} />
+                  <button
+                    type="submit"
+                    className="bg-black text-white rounded-lg py-3 w-full font-medium hover hover:bg-blue-400"
+                  >
+                    Valider le paiement
+                  </button>
+                </div>
               </form>
             )}
           </div>
@@ -256,6 +400,7 @@ export default function CheckoutPage() {
           <div className="md:col-span-2 bg-gray-50 rounded-xl p-6 h-fit">
             {cart && cart.cart.items.length > 0 ? (
               <>
+
                 {cart.cart.items.map((item: any) => (
                   <div key={item.id} className="flex items-center gap-3 mb-4">
                     <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
@@ -332,6 +477,28 @@ export default function CheckoutPage() {
           </div>
         </div>
       )}
+
+      {isLoggedIn === false && (
+  <div>
+    <div className="flex items-center justify-between mb-3">
+      <h2 className="font-bold  text-gray-900">Contact</h2>
+      <Link href="/connexion" className="text-blue-600 text-sm hover:underline">
+        Se connecter
+      </Link>
+    </div>
+    <input
+      type="text"
+      placeholder="E-mail ou numéro de portable"
+      value={contact}
+      onChange={(e) => {
+        setContact(e.target.value);
+        effacerErreur("contact");
+      }}
+      className={`border rounded-lg px-4 py-3 w-full text-gray-900 ${bordure("contact")}`}
+    />
+    <Erreur message={errors.contact} />
+  </div>
+)}
 
       <Footer />
     </>

@@ -110,7 +110,7 @@ export default function ProductDetailPage({
               {product.name}
             </h1>
             <p className="text-2xl text-black font-semibold mb-4">
-              {product.price} FCFA
+              {(product.price).toLocaleString("fr-FR")} FCFA
             </p>
 
             <div className="flex items-center gap-2 text-green-600 text-sm mb-6">
@@ -299,7 +299,7 @@ export default function ProductDetailPage({
 
       <div className="flex items-center gap-4 pt-4 border-t border-gray-700">
         <span className="bg-pink-400 font-bold px-4 py-2 rounded-full">
-          {product.price} FCFA
+          {(product.price).toLocaleString("fr-FR")} FCFA
         </span>
         <p className="text-gray-400 text-sm">
           Livraison 2 000 FCFA partout à Libreville
@@ -452,7 +452,7 @@ export default function ProductDetailPage({
               ) : null}
             </div>
             <p className="font-medium text-gray-900 text-sm">{p.name}</p>
-            <p className="font-bold text-black text-base">{p.price} FCFA</p>
+            <p className="font-bold text-black text-base">{(p.price).toLocaleString("fr-FR")} FCFA</p>
           </Link>
         );
       })}
@@ -481,7 +481,7 @@ export default function ProductDetailPage({
               ) : null}
             </div>
             <p className="font-medium text-gray-900 text-sm">{p.name}</p>
-            <p className="font-bold text-black text-base">{p.price} FCFA</p>
+            <p className="font-bold text-black text-base">{(p.price).toLocaleString("fr-FR")} FCFA</p>
           </Link>
         );
       })}
@@ -503,7 +503,7 @@ export default function ProductDetailPage({
               <div>
                 <p className="font-medium text-black text-sm">{product.name}</p>
                 <p className="text-pink-400 font-semibold text-sm">
-                  {product.price} FCFA
+                  {(product.price * quantity).toLocaleString("fr-FR")} FCFA
                 </p>
               </div>
             </div>
@@ -575,13 +575,13 @@ export default function ProductDetailPage({
                 <Plus size={12} />
               </button>
             </div>
-            <p className="text-gray-900 text-base">{product.price} FCFA</p>
+            <p className="text-gray-900 text-base">{(product.price).toLocaleString("fr-FR")} FCFA</p>
           </div>
         </div>
 
         <div className="md:border-l md:border-gray-200 md:pl-6">
           <p className="text-gray-900 mb-3">
-            Total du panier : <span className="font-bold">{product.price * quantity} FCFA</span>
+            Total du panier : <span className="font-bold">{(product.price * quantity).toLocaleString("fr-FR")} FCFA</span>
           </p>
           <div className="flex gap-3 mb-4">
             <Link
@@ -603,7 +603,8 @@ export default function ProductDetailPage({
               <div
                 className="bg-gray-900 h-1.5 rounded-full"
                 style={{ width: `${Math.min((product.price * quantity / 50000) * 100, 100)}%` }}
-              ></div>
+              >
+              </div>
             </div>
           </div>
         </div>
@@ -631,7 +632,7 @@ export default function ProductDetailPage({
                   ) : null}
                   </div>
                    <p className="font-medium text-gray-900 text-sm">{p.name}</p>
-                   <p className="font-bold text-black text-base">{p.price} FCFA</p>
+                   <p className="font-bold text-black text-base">{(p.price).toLocaleString("fr-FR")} FCFA</p>
                 </Link>
               );
             })}
@@ -649,7 +650,7 @@ export default function ProductDetailPage({
               <div>
                 <p className="font-medium text-gray-900">{product.name}</p>
                 <p className="text-gray-500 text-sm">{selectedSize}</p>
-                <p className="text-gray-900 text-sm">{product.price} FCFA</p>
+                <p className="text-gray-900 text-sm">{(product.price).toLocaleString("fr-FR")} FCFA</p>
               </div>
               <button onClick={() => setShowLocationModal(false)}>
                 <X size={20} className="text-gray-500 hover hover:text-pink-400" />
