@@ -26,11 +26,14 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="flex">
+    <div className="flex min-h-screen">
+      <div className="sticky top-0 h-screen shrink-0 self-start overflow-y-auto">
       <Sidebar />
-      <main className="flex-1 p-8 bg-gradient-to-br from-purple-50 to-blue-50 text-gray-900 min-h-screen">
+      </div>
+      <main className="flex-1 min-w-0 p-8 bg-gradient-to-br from-purple-50 to-blue-50 text-gray-900 min-h-screen">
         {children}
       </main>
     </div>
+    
   );
 }
