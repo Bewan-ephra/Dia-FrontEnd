@@ -1,15 +1,22 @@
 "use client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { apiFetch } from "@/lib/api/client";
+import { logout } from "@/lib/api/auth";
 
 export default function Sidebar() {
-
   const router = useRouter();
 
-  function handleSubmit(){
-    localStorage.removeItem("isLoggedIn");
+  async function handleLogout() {
+    try {
+      await apiFetch("/logout", { method: "POST" });
+    } catch {
+      // Token déjà expiré : on déconnecte quand même côté navigateur
+    }
+    logout();
     router.push("/login");
   }
+
   return (
     <aside className="w-64 h-screen bg-gray-900 text-white flex flex-col p-6">
       <div className="text-2xl font-bold mb-10">DIA Admin</div>
@@ -22,7 +29,7 @@ export default function Sidebar() {
       </nav>
 
       <button
-        onClick={handleSubmit}
+        onClick={handleLogout}
         className="mt-auto text-left hover:underline"
       >
         Déconnexion
