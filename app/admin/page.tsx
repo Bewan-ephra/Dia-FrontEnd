@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Package, Clock, DollarSign, Users, XCircle } from "lucide-react";
+import Link from "next/link";
+import { Package, Clock, DollarSign, Users, XCircle, Scissors, Star } from "lucide-react";
 import { getDashboardStats, DashboardStats } from "@/lib/api/dashboard";
 import { formatPrice } from "@/lib/format";
 
@@ -45,7 +46,7 @@ export default function AdminDashboard() {
     <div>
       <h1 className="text-lg font-semibold text-gray-900 mb-6">Dashboard</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
           <div className="flex items-center gap-3 mb-2">
             <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">
@@ -97,6 +98,32 @@ export default function AdminDashboard() {
           </div>
           <p className="text-2xl font-bold text-gray-900">{cancelledOrders}</p>
         </div>
+
+        <Link
+          href="/admin/sur-mesure"
+          className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition"
+        >
+          <div className="flex items-center gap-3 mb-2">
+            <div className="bg-pink-100 text-pink-600 p-2 rounded-lg">
+              <Scissors size={18} />
+            </div>
+            <span className="text-sm text-gray-500">Demandes sur mesure à chiffrer</span>
+          </div>
+          <p className="text-2xl font-bold text-gray-900">{stats.pending_custom_requests ?? 0}</p>
+        </Link>
+
+        <Link
+          href="/admin/avis"
+          className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition"
+        >
+          <div className="flex items-center gap-3 mb-2">
+            <div className="bg-yellow-100 text-yellow-600 p-2 rounded-lg">
+              <Star size={18} />
+            </div>
+            <span className="text-sm text-gray-500">Avis clients</span>
+          </div>
+          <p className="text-2xl font-bold text-gray-900">{stats.total_reviews ?? 0}</p>
+        </Link>
       </div>
     </div>
   );

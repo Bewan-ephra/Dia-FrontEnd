@@ -29,13 +29,11 @@ export default function AdminLayout({
   }
 
   return (
-    <html lang="fr" translate="no">
-      <div className="flex">
+    <div className="flex">
       <Sidebar />
       <main className="flex-1 p-8 bg-gradient-to-br from-purple-50 to-blue-50 text-gray-900 min-h-screen">
         {children}
       </main>
     </div>
-    </html>
   );
 }

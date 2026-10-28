@@ -2,15 +2,21 @@ import { apiFetch } from "./client";
 
 export interface ProductImage {
   id: number;
-  product_id: number;
   url: string;
   order: number;
+  color: string | null;
 }
 
-export async function uploadProductImage(productId: number, file: File, order: number = 0) {
+export async function uploadProductImage(
+  productId: number,
+  file: File,
+  order: number = 0,
+  color: string | null = null
+) {
   const formData = new FormData();
   formData.append("image", file);
   formData.append("order", String(order));
+  if (color) formData.append("color", color);
 
   return apiFetch(`/products/${productId}/images`, {
     method: "POST",

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ShoppingCart, User, Menu, Heart, Search } from "lucide-react";
+import InboxBadges from "@/components/InboxBadges";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,17 +39,26 @@ useEffect(() => {
   getCategoriesPublic().then((data) => setCategories(data));
 }, []);
 
-    useEffect(() => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    getCart(token).then((data) => {
-      const count = data.cart.items.reduce(
-        (sum: number, item: any) => sum + item.quantity,
-        0
+   useEffect(() => {
+  async function loadCartCount() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setCartCount(0);
+      return;
+    }
+    try {
+      const data = await getCart(token);
+      setCartCount(
+        (data.cart?.items ?? []).reduce((sum: number, item: any) => sum + item.quantity, 0)
       );
-      setCartCount(count);
-    });
+    } catch {
+      setCartCount(0);
+    }
   }
+
+  loadCartCount();
+  window.addEventListener("cart:updated", loadCartCount);
+  return () => window.removeEventListener("cart:updated", loadCartCount);
 }, []);
 
 
@@ -103,7 +113,7 @@ useEffect(() => {
     </span>
   )}
       </Link>
-
+    <InboxBadges />
     <Link href="/profil" className="text-gray-600 hover:text-blue-300">
       <User size={20} />
     </Link>

@@ -1,17 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Scissors } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
-import { getMe, getFavorites, getAddresses } from "@/lib/api";
-import { myOrders } from "@/lib/myOrders";
+import { getMe, getFavoriteIds, getAddresses, getMyOrderCounts, logoutUser } from "@/lib/api";
 import { Package, MapPin, Heart, ChevronRight, LogOut } from "lucide-react";
 
 export default function ProfilPage() {
   const [user, setUser] = useState<any>(null);
+  const [ordersCount, setOrdersCount] = useState(0);
   const [favoritesCount, setFavoritesCount] = useState(0);
   const [addressesCount, setAddressesCount] = useState(0);
   const router = useRouter();
@@ -22,13 +23,23 @@ export default function ProfilPage() {
       router.push("/connexion");
       return;
     }
-    getMe(token).then((data) => setUser(data));
-    setFavoritesCount(getFavorites().length);
-    setAddressesCount(getAddresses().length);
+
+    getMe(token)
+      .then(setUser)
+      .catch(() => router.push("/connexion"));
+    getMyOrderCounts()
+      .then((c: any) => setOrdersCount(c.all ?? 0))
+      .catch(() => {});
+    getFavoriteIds()
+      .then((ids: number[]) => setFavoritesCount(ids.length))
+      .catch(() => {});
+    getAddresses()
+      .then((a: any[]) => setAddressesCount(a.length))
+      .catch(() => {});
   }, [router]);
 
-  function handleLogout() {
-    localStorage.removeItem("token");
+  async function handleLogout() {
+    await logoutUser();
     router.push("/connexion");
   }
 
@@ -62,10 +73,16 @@ export default function ProfilPage() {
       title: "Mes favoris",
       description: "Retrouver les produits que vous aimez",
     },
+    {
+  href: "/mes-demandes",
+  icon: Scissors,
+  title: "Mes demandes sur mesure",
+  description: "Suivre vos devis de personnalisation",
+},
   ];
 
   const stats = [
-    { label: "Commandes", value: myOrders.length },
+    { label: "Commandes", value: ordersCount },
     { label: "Favoris", value: favoritesCount },
     { label: "Adresses", value: addressesCount },
   ];

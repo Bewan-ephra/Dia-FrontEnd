@@ -21,6 +21,8 @@ export interface DashboardStats {
     user: { id: number; name: string } | null;
     vendor: { id: number; name: string } | null;
   }[];
+  pending_custom_requests: number;
+  total_reviews: number;
 }
 
 export async function getDashboardStats() {

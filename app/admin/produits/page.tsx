@@ -2,38 +2,56 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Pencil, Trash2, Search, Package } from "lucide-react";
-import { getProducts, deleteProduct, Product } from "@/lib/api/products";
+import { getAdminProducts, deleteProduct, Product } from "@/lib/api/products";
 
 export default function ProductsPage() {
   const [productList, setProductList] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+  const [page, setPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [reloadKey, setReloadKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
+
     // Debounce : on attend 400 ms après la dernière frappe avant d'appeler l'API
     const timer = setTimeout(async () => {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await getProducts(search || undefined);
-        setProductList(data);
+        const res = await getAdminProducts({
+          search: search || undefined,
+          status: status || undefined,
+          page,
+        });
+        if (cancelled) return;
+        setProductList(res.data);
+        setLastPage(res.meta.last_page);
+        setTotal(res.meta.total);
       } catch (err) {
+        if (cancelled) return;
         setError(
           err instanceof Error ? err.message : "Erreur lors du chargement des produits"
         );
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       }
     }, 400);
 
-    return () => clearTimeout(timer);
-  }, [search]);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [search, status, page, reloadKey]);
 
   async function handleDelete(id: number) {
     const confirmed = window.confirm(
-      "Supprimer ce produit ? Cette action est irréversible."
+      "Supprimer définitivement ce produit ?\n\nPour le retirer de la boutique sans le perdre, ouvre-le et décoche « Visible dans la boutique »."
     );
     if (!confirmed) return;
 
@@ -41,7 +59,8 @@ export default function ProductsPage() {
     setError(null);
     try {
       await deleteProduct(id);
-      setProductList((prev) => prev.filter((p) => p.id !== id));
+      if (productList.length === 1 && page > 1) setPage((p) => p - 1);
+      else setReloadKey((k) => k + 1);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erreur lors de la suppression");
     } finally {
@@ -68,18 +87,36 @@ export default function ProductsPage() {
         </Link>
       </div>
 
-      <div className="relative mb-4 max-w-sm">
-        <Search
-          size={16}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-        />
-        <input
-          type="text"
-          placeholder="Rechercher un produit..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border rounded-lg pl-9 pr-4 py-2 w-full text-sm"
-        />
+      <div className="flex flex-wrap gap-3 mb-4">
+        <div className="relative max-w-sm w-full sm:w-auto sm:flex-1">
+          <Search
+            size={16}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+          />
+          <input
+            type="text"
+            placeholder="Rechercher (nom ou référence)..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+            className="border rounded-lg pl-9 pr-4 py-2 w-full text-sm"
+          />
+        </div>
+
+        <select
+          value={status}
+          onChange={(e) => {
+            setStatus(e.target.value);
+            setPage(1);
+          }}
+          className="border rounded-lg px-4 py-2 text-sm"
+        >
+          <option value="">Tous les produits</option>
+          <option value="active">Visibles</option>
+          <option value="hidden">Masqués</option>
+        </select>
       </div>
 
       {error && (
@@ -106,22 +143,42 @@ export default function ProductsPage() {
           </thead>
           <tbody>
             {productList.map((product) => (
-              <tr key={product.id} className="border-b border-gray-100 hover:bg-gray-50">
+              <tr
+                key={product.id}
+                className={`border-b border-gray-100 hover:bg-gray-50 ${
+                  product.is_active ? "" : "opacity-60"
+                }`}
+              >
                 <td className="p-3 text-gray-500 font-mono text-xs">
                   {product.sku ?? `#${product.id}`}
                 </td>
-                <td className="p-3 font-medium text-gray-900">{product.name}</td>
+                <td className="p-3 font-medium text-gray-900">
+                  {product.name}
+                  {!product.is_active && (
+                    <span className="ml-2 px-2 py-0.5 rounded-full text-xs bg-gray-200 text-gray-700">
+                      Masqué
+                    </span>
+                  )}
+                </td>
                 <td className="p-3">
                   {Number(product.price).toLocaleString("fr-FR")} FCFA
                 </td>
                 <td className="p-3">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${getStockBadge(
-                      product.stock
-                    )}`}
-                  >
-                    {product.stock === 0 ? "Rupture" : `${product.stock} en stock`}
-                  </span>
+                  {product.on_order ? (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                      Sur commande
+                    </span>
+                  ) : (
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${getStockBadge(
+                        product.available_stock
+                      )}`}
+                    >
+                      {product.available_stock === 0
+                        ? "Rupture"
+                        : `${product.available_stock} en stock`}
+                    </span>
+                  )}
                 </td>
                 <td className="p-3 text-gray-500">{product.category.name}</td>
                 <td className="p-3 text-right">
@@ -143,6 +200,30 @@ export default function ProductsPage() {
             ))}
           </tbody>
         </table>
+      )}
+
+      {lastPage > 1 && (
+        <div className="flex items-center justify-between mt-4 text-sm text-gray-500">
+          <span>
+            Page {page} sur {lastPage} · {total} produits
+          </span>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setPage((p) => p - 1)}
+              disabled={page <= 1 || isLoading}
+              className="border rounded-lg px-3 py-1.5 disabled:opacity-50"
+            >
+              Précédent
+            </button>
+            <button
+              onClick={() => setPage((p) => p + 1)}
+              disabled={page >= lastPage || isLoading}
+              className="border rounded-lg px-3 py-1.5 disabled:opacity-50"
+            >
+              Suivant
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

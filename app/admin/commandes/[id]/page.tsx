@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 import { getOrder, updateOrder, Order } from "@/lib/api/orders";
 import {
   ORDER_STATUSES,
+  PAYMENT_STATUSES,
   getStatusColor,
   getStatusLabel,
   getPaymentMethodLabel,
   getPaymentStatusLabel,
+  getDeliveryModeLabel,
 } from "@/lib/order-status";
 import { formatPrice, formatDate } from "@/lib/format";
 
@@ -92,6 +94,14 @@ export default function OrderDetailPage({
       <h1 className="text-2xl font-bold mb-6">
         Commande #{order.id} de {order.user?.name ?? "compte supprimé"}
       </h1>
+      {order.user && (
+  <Link
+    href={`/admin/messages/${order.user.id}?commande=${order.id}`}
+    className="inline-block mb-6 text-blue-600 text-sm"
+  >
+    Écrire au client à propos de cette commande
+  </Link>
+)}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mb-6 max-w-2xl">
         <div>
@@ -127,6 +137,24 @@ export default function OrderDetailPage({
         <div>
           <p className="text-gray-500">Téléphone</p>
           <p className="font-medium">{order.shipping_phone}</p>
+        </div>
+        <div>
+          <p className="text-gray-500">Destinataire</p>
+          <p className="font-medium">{order.shipping_name ?? "—"}</p>
+        </div>
+        <div>
+          <p className="text-gray-500">Réception</p>
+          <p className="font-medium">{getDeliveryModeLabel(order.delivery_mode)}</p>
+        </div>
+        <div>
+          <p className="text-gray-500">Frais de livraison</p>
+          <p className="font-medium">{formatPrice(order.shipping_fee)}</p>
+        </div>
+        <div>
+          <p className="text-gray-500">Acompte demandé</p>
+          <p className="font-medium">
+            {Number(order.deposit_amount) > 0 ? formatPrice(order.deposit_amount) : "—"}
+          </p>
         </div>
         {order.vendor && (
           <div>
@@ -205,9 +233,11 @@ export default function OrderDetailPage({
           onChange={(e) => setPaymentStatus(e.target.value)}
           className="border rounded px-4 py-2"
         >
-          <option value="non_paye">Non payé</option>
-          <option value="paye">Payé</option>
-          <option value="echoue">Échoué</option>
+          {PAYMENT_STATUSES.map((s) => (
+            <option key={s.value} value={s.value}>
+              {s.label}
+            </option>
+          ))}
         </select>
 
         <button

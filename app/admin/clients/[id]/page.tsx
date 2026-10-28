@@ -57,7 +57,9 @@ export default function ClientDetailPage({
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">Voir détails : {user.name}</h1>
-
+      <Link href={`/admin/messages/${user.id}`} className="inline-block mb-6 text-blue-600 text-sm">
+  Écrire à ce client
+</Link>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mb-8 max-w-2xl">
         <div>
           <p className="text-gray-500">Client</p>

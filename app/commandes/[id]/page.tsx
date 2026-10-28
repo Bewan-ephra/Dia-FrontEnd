@@ -2,43 +2,65 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import {
+  ArrowLeft, Check, Clock, CheckCircle, XCircle, Truck, Package, MessageCircle,
+} from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
-import { myOrders } from "@/lib/myOrders";
-import { ArrowLeft, Check, Clock, CheckCircle, XCircle, Package, MessageCircle, } from "lucide-react";
-import Image from "next/image";
-import { resolveOrderItem } from "@/lib/api";
+import Photo from "@/components/Photo";
+import { getMyOrder } from "@/lib/api";
+import {
+  getStatusColor,
+  getStatusLabel,
+  getPaymentMethodLabel,
+  getPaymentStatusColor,
+  getPaymentStatusLabel,
+  getDeliveryModeLabel,
+} from "@/lib/order-status";
+import { formatPrice } from "@/lib/format";
+import { SHOP_WHATSAPP, depositLabel } from "@/lib/shop";
+import { useShopSettings } from "@/lib/useShopSettings";
 
-const steps = [
-  {
-    title: "Commande reçue",
-    description: "Votre commande a bien été enregistrée.",
-  },
-  {
-    title: "Acompte confirmé",
-    description: "Le paiement de la moitié du montant valide la commande.",
-  },
-  {
-    title: "En préparation",
-    description: "Vos articles sont préparés avec soin.",
-  },
-  {
-    title: "Livrée",
-    description: "Votre commande est arrivée chez vous.",
-  },
-];
-
-const statusConfig: { [key: string]: { color: string; icon: any } } = {
-  "En attente": { color: "bg-amber-100 text-amber-700", icon: Clock },
-  "Livrée": { color: "bg-green-100 text-green-700", icon: CheckCircle },
-  "Annulée": { color: "bg-red-100 text-red-700", icon: XCircle },
+const statusIcons: Record<string, any> = {
+  en_attente: Clock,
+  confirmee: CheckCircle,
+  expediee: Truck,
+  livree: CheckCircle,
+  annulee: XCircle,
 };
 
-function getCurrentStep(status: string) {
-  if (status === "Livrée") return steps.length;
-  if (status === "En attente") return 1;
-  return 0;
+function buildSteps(order: any, depositText: string) {
+  const pickup = order.delivery_mode === "retrait";
+
+  return [
+    {
+      title: "Commande reçue",
+      description: "Votre commande a bien été enregistrée.",
+    },
+    {
+      title: "Acompte confirmé",
+      description: `Le paiement de ${depositText} du montant valide la commande.`,
+    },
+    {
+      title: "En préparation",
+      description: "Vos articles sont préparés avec soin.",
+    },
+    pickup
+      ? { title: "Retirée", description: "Vous avez retiré votre commande en magasin." }
+      : { title: "Livrée", description: "Votre commande est arrivée chez vous." },
+  ];
+}
+
+// Index de l'étape en cours (4 = tout est terminé)
+function getCurrentStep(order: any) {
+  const depositPaid =
+    order.payment_status === "acompte_paye" || order.payment_status === "paye";
+
+  if (order.status === "livree") return 4;
+  if (order.status === "expediee") return 3;
+  if (order.status === "confirmee") return 2;
+  return depositPaid ? 2 : 1; // en_attente
 }
 
 function formatDate(date: string) {
@@ -55,20 +77,28 @@ export default function CommandeDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const [order, setOrder] = useState<any>(null);
-  const [notFound, setNotFound] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    params.then(({ id }) => {
-      const found = myOrders.find((o) => o.id === Number(id));
-      if (found) {
-        setOrder(found);
-      } else {
-        setNotFound(true);
+    async function load() {
+      const { id } = await params;
+      try {
+        setOrder(await getMyOrder(Number(id)));
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Commande introuvable.");
+      } finally {
+        setIsLoading(false);
       }
-    });
+    }
+    load();
   }, [params]);
 
-  if (notFound) {
+  if (isLoading) {
+    return <div className="p-8 text-gray-600">Chargement...</div>;
+  }
+
+  if (!order) {
     return (
       <>
         <Navbar />
@@ -77,11 +107,9 @@ export default function CommandeDetailPage({
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Package size={28} className="text-gray-400" />
             </div>
-            <p className="text-gray-900 font-medium mb-2">
-              Commande introuvable
-            </p>
+            <p className="text-gray-900 font-medium mb-2">Commande introuvable</p>
             <p className="text-gray-500 text-sm mb-6">
-              Cette commande n'existe pas ou a été supprimée.
+              {error ?? "Cette commande n'existe pas ou a été supprimée."}
             </p>
             <Link
               href="/commandes"
@@ -96,17 +124,21 @@ export default function CommandeDetailPage({
     );
   }
 
-  if (!order) {
-    return <div>Chargement...</div>;
-  }
+  const StatusIcon = statusIcons[order.status] ?? Clock;
+  const steps = buildSteps(order);
+  const currentStep = getCurrentStep(order);
+  const isCancelled = order.status === "annulee";
 
-  const config = statusConfig[order.status] || {
-    color: "bg-gray-100 text-gray-700",
-    icon: Clock,
-  };
-  const StatusIcon = config.icon;
-  const currentStep = getCurrentStep(order.status);
-  const isCancelled = order.status === "Annulée";
+  const total = Number(order.total);
+  const shipping = Number(order.shipping_fee);
+  const discount = Number(order.discount);
+  const deposit = Number(order.deposit_amount);
+  const subtotal = total - shipping + discount;
+  const pickup = order.delivery_mode === "retrait";
+
+  const whatsapp = `https://wa.me/${SHOP_WHATSAPP}?text=${encodeURIComponent(
+    `Bonjour, je vous écris au sujet de ma commande #${order.id}.`
+  )}`;
 
   return (
     <>
@@ -126,27 +158,25 @@ export default function CommandeDetailPage({
             <div className="relative z-10">
               <div className="flex items-start justify-between gap-4 mb-6">
                 <div>
-                  <p className="text-pink-400 text-xs font-semibold uppercase mb-1">
-                    Commande
-                  </p>
+                  <p className="text-pink-400 text-xs font-semibold uppercase mb-1">Commande</p>
                   <p className="text-2xl font-bold">#{order.id}</p>
                   <p className="text-gray-300 text-sm">
-                    Passée le {formatDate(order.date)}
+                    Passée le {formatDate(order.created_at)}
                   </p>
                 </div>
                 <span
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${config.color}`}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                    order.status
+                  )}`}
                 >
                   <StatusIcon size={14} />
-                  {order.status}
+                  {getStatusLabel(order.status)}
                 </span>
               </div>
 
               <div className="bg-gray-800 rounded-xl p-4 flex items-center justify-between">
                 <p className="text-gray-300 text-sm">Total de la commande</p>
-                <p className="text-xl font-bold">
-                  {order.total.toLocaleString()} FCFA
-                </p>
+                <p className="text-xl font-bold">{formatPrice(total)}</p>
               </div>
             </div>
           </div>
@@ -157,9 +187,7 @@ export default function CommandeDetailPage({
             <div className="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl p-4 mb-8">
               <XCircle size={20} className="text-red-600 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-medium text-red-700 text-sm">
-                  Cette commande a été annulée
-                </p>
+                <p className="font-medium text-red-700 text-sm">Cette commande a été annulée</p>
                 <p className="text-red-600 text-xs">
                   Pour toute question, contactez-nous sur WhatsApp.
                 </p>
@@ -218,6 +246,7 @@ export default function CommandeDetailPage({
                         }`}
                       >
                         {step.description}
+                        {index === 1 && deposit > 0 && ` (${formatPrice(deposit)})`}
                       </p>
                     </div>
                   </div>
@@ -228,31 +257,82 @@ export default function CommandeDetailPage({
 
           <h2 className="font-bold text-gray-900 mb-4">ARTICLES</h2>
           <div className="border border-gray-200 rounded-xl divide-y divide-gray-200 mb-8">
+            {order.items.map((item: any) => (
+              <div key={item.id} className="flex items-center gap-4 p-4">
+                <div className="relative w-16 h-20 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0 flex items-center justify-center">
+                  {item.image ? (
+                    <Photo src={item.image} alt={item.product_name} />
+                  ) : (
+                    <Package size={20} className="text-gray-400" />
+                  )}
+                </div>
+                <div className="flex-1">
+                  <p className="text-gray-900 text-sm font-medium">{item.product_name}</p>
+                  <p className="text-gray-500 text-xs">Quantité : {item.quantity}</p>
+                </div>
+                <p className="text-gray-900 text-sm font-medium">
+                  {formatPrice(Number(item.unit_price) * item.quantity)}
+                </p>
+              </div>
+            ))}
 
-           {order.items.map((item: any, index: number) => {
-  const { name, quantity, image } = resolveOrderItem(item);
-  return (
-    <div key={index} className="flex items-center gap-4 p-4">
-      <div className="relative w-16 h-20 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0 flex items-center justify-center">
-        {image ? (
-          <Image src={image} alt={name} fill className="object-cover" />
-        ) : (
-          <Package size={20} className="text-gray-400" />
-        )}
-      </div>
-      <div className="flex-1">
-        <p className="text-gray-900 text-sm font-medium">{name}</p>
-        <p className="text-gray-500 text-xs">Quantité : {quantity}</p>
-      </div>
-    </div>
-  );
-})}
+            <div className="p-4 bg-gray-50 rounded-b-xl text-sm">
+              <div className="flex items-center justify-between text-gray-500 mb-1">
+                <p>Sous-total</p>
+                <p>{formatPrice(subtotal)}</p>
+              </div>
+              {discount > 0 && (
+                <div className="flex items-center justify-between text-green-700 mb-1">
+                  <p>Réduction</p>
+                  <p>− {formatPrice(discount)}</p>
+                </div>
+              )}
+              <div className="flex items-center justify-between text-gray-500 mb-2">
+                <p>{pickup ? "Retrait" : "Livraison"}</p>
+                <p>{shipping === 0 ? (pickup ? "Gratuit" : "Offerte") : formatPrice(shipping)}</p>
+              </div>
+              <div className="flex items-center justify-between border-t border-gray-200 pt-2">
+                <p className="text-gray-500">Total</p>
+                <p className="font-bold text-gray-900">{formatPrice(total)}</p>
+              </div>
+              {deposit > 0 && (
+                <>
+                  <div className="flex items-center justify-between text-gray-500 mt-2">
+                    <p>Acompte</p>
+                    <p>{formatPrice(deposit)}</p>
+                  </div>
+                  <div className="flex items-center justify-between text-gray-500">
+                    <p>{pickup ? "Solde au retrait" : "Solde à la livraison"}</p>
+                    <p>{formatPrice(total - deposit)}</p>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
 
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-b-xl">
-              <p className="text-gray-500 text-sm">Total</p>
-              <p className="font-bold text-gray-900">
-                {order.total.toLocaleString()} FCFA
+          <h2 className="font-bold text-gray-900 mb-4">LIVRAISON ET PAIEMENT</h2>
+          <div className="border border-gray-200 rounded-xl p-4 mb-8 text-sm grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p className="text-gray-500 text-xs mb-1">{getDeliveryModeLabel(order.delivery_mode)}</p>
+              {order.shipping_name && (
+                <p className="text-gray-900 font-medium">{order.shipping_name}</p>
+              )}
+              <p className="text-gray-700">{order.shipping_address}</p>
+              {!pickup && <p className="text-gray-700">{order.shipping_city}</p>}
+              <p className="text-gray-700">{order.shipping_phone}</p>
+            </div>
+            <div>
+              <p className="text-gray-500 text-xs mb-1">Paiement</p>
+              <p className="text-gray-900 font-medium mb-1">
+                {getPaymentMethodLabel(order.payment_method)}
               </p>
+              <span
+                className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${getPaymentStatusColor(
+                  order.payment_status
+                )}`}
+              >
+                {getPaymentStatusLabel(order.payment_status)}
+              </span>
             </div>
           </div>
 
@@ -264,9 +344,12 @@ export default function CommandeDetailPage({
               <p className="font-medium text-gray-900 text-sm">
                 Une question sur cette commande ?
               </p>
-              <a href="https://wa.me/24160348225" className="text-blue-600 text-xs hover:underline">
-                Un expert vous répond sur WhatsApp
-              </a>
+              <Link href={`/messages?commande=${order.id}`} className="text-blue-600 text-xs hover:underline mr-4">
+  Écrire à la boutique
+</Link>
+<a href={whatsapp} className="text-blue-600 text-xs hover:underline">
+  Ou sur WhatsApp
+</a>
             </div>
           </div>
         </div>

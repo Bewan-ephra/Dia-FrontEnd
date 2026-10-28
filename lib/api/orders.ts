@@ -26,6 +26,10 @@ export interface Order {
   user?: { id: number; name: string } | null;
   vendor?: { id: number; name: string } | null;
   items: OrderItem[];
+  delivery_mode: string;
+shipping_name: string | null;
+shipping_fee: string;
+deposit_amount: string;
 }
 
 export interface PaginatedResponse<T> {

@@ -2,17 +2,17 @@ import { apiFetch } from "./client";
 
 export interface ProductVariant {
   id: number;
-  product_id: number;
-  attribute: string;
-  value: string;
+  color: string | null;
+  size: string | null;
+  label: string;
   price_adjustment: string;
   stock: number;
   sku: string | null;
 }
 
 interface VariantPayload {
-  attribute: string;
-  value: string;
+  color?: string;
+  size?: string;
   price_adjustment?: number;
   stock: number;
   sku?: string;
@@ -25,7 +25,10 @@ export async function createProductVariant(productId: number, data: VariantPaylo
   }) as Promise<ProductVariant>;
 }
 
-export async function updateProductVariant(variantId: number, data: Partial<VariantPayload>) {
+export async function updateProductVariant(
+  variantId: number,
+  data: { stock?: number; price_adjustment?: number; sku?: string }
+) {
   return apiFetch(`/product-variants/${variantId}`, {
     method: "PUT",
     body: JSON.stringify(data),

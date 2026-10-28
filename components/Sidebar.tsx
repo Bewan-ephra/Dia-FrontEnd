@@ -3,9 +3,20 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { apiFetch } from "@/lib/api/client";
 import { logout } from "@/lib/api/auth";
+import { useUnreadSummary } from "@/lib/useUnreadSummary";
+
+function Count({ n }: { n: number }) {
+  if (n <= 0) return null;
+  return (
+    <span className="ml-2 bg-pink-400 text-white text-xs rounded-full px-2 py-0.5">
+      {n > 99 ? "99+" : n}
+    </span>
+  );
+}
 
 export default function Sidebar() {
   const router = useRouter();
+  const summary = useUnreadSummary();
 
   async function handleLogout() {
     try {
@@ -26,12 +37,19 @@ export default function Sidebar() {
         <Link href="/admin/categories">Catégories</Link>
         <Link href="/admin/commandes">Commandes</Link>
         <Link href="/admin/clients">Clients</Link>
+        <Link href="/admin/sur-mesure">Sur mesure</Link>
+        <Link href="/admin/avis">Avis</Link>
+        <Link href="/admin/messages" className="flex items-center">
+          Messages
+          <Count n={summary.messages_unread} />
+        </Link>
+        <Link href="/admin/notifications" className="flex items-center">
+          Notifications
+          <Count n={summary.notifications_unread} />
+        </Link>
       </nav>
 
-      <button
-        onClick={handleLogout}
-        className="mt-auto text-left hover:underline"
-      >
+      <button onClick={handleLogout} className="mt-auto text-left hover:underline">
         Déconnexion
       </button>
     </aside>

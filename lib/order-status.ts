@@ -8,6 +8,7 @@ export const ORDER_STATUSES: { value: string; label: string; color: string }[] =
 
 export const PAYMENT_STATUSES: { value: string; label: string; color: string }[] = [
   { value: "non_paye", label: "Non payé", color: "bg-gray-100 text-gray-700" },
+  { value: "acompte_paye", label: "Acompte payé", color: "bg-blue-100 text-blue-700" },
   { value: "paye", label: "Payé", color: "bg-green-100 text-green-700" },
   { value: "echoue", label: "Échoué", color: "bg-red-100 text-red-700" },
 ];
@@ -29,7 +30,15 @@ export function getPaymentStatusColor(status: string) {
 }
 
 export function getPaymentMethodLabel(method: string) {
-  if (method === "whatsapp") return "WhatsApp";
-  if (method === "en_ligne") return "Paiement en ligne";
-  return method;
+  const labels: Record<string, string> = {
+    airtel_money: "Airtel Money",
+    moov_money: "Moov Money",
+    whatsapp: "WhatsApp (ancien)",
+    en_ligne: "En ligne (ancien)",
+  };
+  return labels[method] ?? method;
+}
+
+export function getDeliveryModeLabel(mode: string) {
+  return mode === "retrait" ? "Retrait en magasin" : "Livraison";
 }

@@ -22,9 +22,15 @@ export default function AdressesPage() {
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [phone, setPhone] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setAddresses(getAddresses());
+    getAddresses()
+      .then(setAddresses)
+      .catch((err: Error) => setError(err.message || "Impossible de charger tes adresses."))
+      .finally(() => setIsLoading(false));
   }, []);
 
   function resetForm() {
@@ -39,20 +45,39 @@ export default function AdressesPage() {
     resetForm();
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!street.trim() || !city.trim()) return;
-    const updated = addAddress({ label, street, city, phone });
-    setAddresses(updated);
-    closeModal();
+
+    setIsSaving(true);
+    setError(null);
+    try {
+      const created = await addAddress({
+        label,
+        street: street.trim(),
+        city: city.trim(),
+        phone: phone.trim() || null,
+      });
+      setAddresses((prev) => [created, ...prev]);
+      closeModal();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Impossible d'enregistrer l'adresse.");
+    } finally {
+      setIsSaving(false);
+    }
   }
 
-  function handleRemove(id: number) {
-    const updated = removeAddress(id);
-    setAddresses(updated);
+  async function handleRemove(id: number) {
+    setError(null);
+    try {
+      await removeAddress(id);
+      setAddresses((prev) => prev.filter((a) => a.id !== id));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Impossible de supprimer l'adresse.");
+    }
   }
 
-  const canSubmit = street.trim() !== "" && city.trim() !== "";
+  const canSubmit = street.trim() !== "" && city.trim() !== "" && !isSaving;
 
   return (
     <>
@@ -77,7 +102,15 @@ export default function AdressesPage() {
             </button>
           </div>
 
-          {addresses.length === 0 ? (
+          {error && (
+            <div className="bg-red-50 text-red-700 border border-red-200 rounded-lg p-3 mb-6 text-sm">
+              {error}
+            </div>
+          )}
+
+          {isLoading ? (
+            <p className="text-gray-500 text-sm">Chargement...</p>
+          ) : addresses.length === 0 ? (
             <div className="text-center py-16">
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MapPin size={28} className="text-gray-400" />
@@ -191,7 +224,7 @@ export default function AdressesPage() {
                 disabled={!canSubmit}
                 className="bg-gray-900 hover:bg-blue-300 text-white rounded-lg py-3 font-medium transition disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
-                Enregistrer l'adresse
+                {isSaving ? "Enregistrement..." : "Enregistrer l'adresse"}
               </button>
             </form>
           </div>
